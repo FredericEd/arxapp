@@ -1,5 +1,5 @@
 import React from 'react';
-import { FlatList, StyleSheet } from 'react-native';
+import { FlatList, ScrollView, View, Text, StyleSheet } from 'react-native';
 import {getInstalaciones} from '../actions/apiFunctions';
 import CardInstalacion from '../elements/CardInstalacion';
 import { connect } from 'react-redux';
@@ -24,6 +24,8 @@ class ReservasScreen extends React.Component {
     }
     render() {
       return (
+        <ScrollView>
+          {this.state.elements.length > 0 &&
           <FlatList
             style={{paddingLeft:5, paddingTop:5}}
             data={this.state.elements}
@@ -31,8 +33,14 @@ class ReservasScreen extends React.Component {
               <CardInstalacion instalacion={item} navigation={this.props.navigation} />
             )}
             keyExtractor={element => "" + element.id_instalacion}
-            numColumns={2}
-          />
+            numColumns={2} />
+          }
+          {this.state.elements.length == 0 &&
+              <View>
+                  <Text style={styles.emptyText}>No hay instalaciones disponibles.</Text>
+              </View>
+          }
+          </ScrollView>
       );
     }
   }
@@ -40,6 +48,10 @@ class ReservasScreen extends React.Component {
     icon: {
       width: 24,
       height: 24,
+    },
+    emptyText:{
+      padding:10,
+      fontStyle:"italic",
     },
   });
 const mapStateToProps = state => ({

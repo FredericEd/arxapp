@@ -1,5 +1,5 @@
 import React from 'react';
-import {TouchableOpacity, View, StyleSheet, Text, TextInput, Modal} from 'react-native';
+import {TouchableOpacity, View, StyleSheet, Text, TextInput, Modal, ScrollView, KeyboardAvoidingView} from 'react-native';
 import {recoverClave, confirmClave, saveClave} from '../actions/authFunctions';
 import {connect} from 'react-redux';
 import Toast from 'react-native-simple-toast';
@@ -59,7 +59,7 @@ class RecoverScreen extends React.Component {
 
     render() {
       return (
-        <View style={{flex:1}}>
+        <ScrollView>
           <Loader loader={this.props.loader} />
           <View style={styles.container}>
             <Modal
@@ -98,6 +98,7 @@ class RecoverScreen extends React.Component {
                 </View>
               </View>
             </Modal>
+            <KeyboardAvoidingView style={{ flex: 1 }} keyboardVerticalOffset={100} behavior={"position"}>
               <View style={{flexDirection:"row"}}>
                   <View style={{flex:1}}/>
                   <Text style={styles.title}>Recuperación de clave</Text>
@@ -134,8 +135,9 @@ class RecoverScreen extends React.Component {
               <TouchableOpacity style={styles.buttonContainer} onPress={this.handleConfirm}>
                   <Text style={styles.buttonText}>Confirmar código</Text>
               </TouchableOpacity>
+            </KeyboardAvoidingView>
           </View>
-        </View>
+        </ScrollView>
       )
   }
 }

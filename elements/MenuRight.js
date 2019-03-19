@@ -1,8 +1,8 @@
 import React from 'react';
 import { TouchableOpacity, Image, View, StyleSheet, Modal, Text } from 'react-native';
 import {connect} from 'react-redux';
-import { Updates } from 'expo';
 import {updateUser, updateCasa} from '../redux/actions';
+import {Header} from 'react-navigation';
 
 class MenuRight extends React.Component {
   state = {
@@ -18,7 +18,7 @@ class MenuRight extends React.Component {
     this.cancelDialog();
     this.props.updateUser({});
     this.props.updateCasa({});
-    //Updates.reload();
+    this.props.screenProps.cerrarSesion();
   }
   render() {
     return (
@@ -69,6 +69,8 @@ const styles = StyleSheet.create({
   img: {
     margin: 10,
     tintColor: "#fff",
+    height: Header.HEIGHT - 20,
+    aspectRatio: 1,
   },
   smallButton: {
     margin: 5,

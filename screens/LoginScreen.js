@@ -1,5 +1,5 @@
 import React from 'react';
-import {TouchableOpacity, View, StyleSheet, Text, TextInput, Image} from 'react-native';
+import {TouchableOpacity, View, StyleSheet, Text, TextInput, Image, KeyboardAvoidingView, ScrollView} from 'react-native';
 import {login} from '../actions/authFunctions';
 import {connect} from 'react-redux';
 import {updateUser, updateLoader} from '../redux/actions';
@@ -39,15 +39,14 @@ class LoginScreen extends React.Component {
 
     render() {
         return (
-        <View style={{flex:1}}>
+        <ScrollView keyboardShouldPersistTaps="always">
             <Loader loader={this.props.loader} />
-            <View style={styles.container}>
+            <KeyboardAvoidingView style={styles.container} keyboardVerticalOffset={50} behavior={"position"}>
                 <View style={{flexDirection:"row"}}>
                     <View style={{flex:1}}/>
-                    <Image style={styles.logo} source={require('../assets/arxlogo2.jpg')} />
+                    <Image style={styles.logo} source={require('../assets/arxlogo2.png')} />
                     <View style={{flex:1}}/>
                 </View>
-                <Text style={styles.error}>{this.state.error}</Text>
                 <TextInput style = {styles.input}
                     placeholder="correo"
                     value={this.state.correo}
@@ -68,15 +67,15 @@ class LoginScreen extends React.Component {
                 <TouchableOpacity style={styles.buttonContainer} onPress={() => this.props.navigation.navigate('Recover')}>
                     <Text style={styles.buttonText}>Recuperar clave</Text>
                 </TouchableOpacity>
-            </View>
-        </View>
+            </KeyboardAvoidingView>
+        </ScrollView>
         )
   }
 }
 const styles = StyleSheet.create({
     container: {
-     padding: 20,
-     flex:1,
+        padding: 20,
+        flex:1,
     },
     input:{
         height: 40,

@@ -188,3 +188,20 @@ export const saveReserva = async (id_casa, id_instalacion, fecha, time, horas, t
     console.log(json);
     return json;
 }
+
+export const saveEmergencia = async (id_casa, token) => {
+    const queryString = require('query-string');
+    const response = await fetch('https://arxsmart.com/api/v1/emergencias', {
+        method: 'POST',
+        headers: {
+            'Content-Type':'application/x-www-form-urlencoded',
+            'token': token,
+            'Cache-Control': 'no-cache',
+            'Expires': '0',
+        },
+        body: queryString.stringify({id_casa}),
+    });
+    const json = await response.json();
+    console.log(json);
+    return json;
+}

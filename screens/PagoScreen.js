@@ -1,11 +1,21 @@
 import React from 'react';
-import { StyleSheet, View, WebView } from 'react-native';
+import { StyleSheet, View, WebView, ActivityIndicator  } from 'react-native';
 import { updateLoader } from '../redux/actions';
 import { connect } from 'react-redux';
 
 class HomeScreen extends React.Component {
     state = {
       url: "",
+    }
+    ActivityIndicatorLoadingView = () => {
+      //making a view to show to while loading the webpage
+      return (
+        <ActivityIndicator
+          color="#009688"
+          size="large"
+          style={styles.ActivityIndicatorStyle}
+        />
+      );
     }
     componentDidMount(){
       if (typeof this.props.navigation.state.params.id_deuda != "undefined") {
@@ -15,11 +25,13 @@ class HomeScreen extends React.Component {
       }
     }
     render() {
-      console.log(this.state.url);
       return (
-        <View style={{flex:1,paddingTop: 10}}>
+        <View style={{flex:1}}>
           <WebView
+            style={styles.WebViewStyle}
             source={{uri: this.state.url}}
+            renderLoading={this.ActivityIndicatorLoadingView}
+            startInLoadingState={true}
           />
         </View>
       );
@@ -28,6 +40,15 @@ class HomeScreen extends React.Component {
   const styles = StyleSheet.create({
     container: {
       flexDirection: "row",
+    },
+    ActivityIndicatorStyle: {
+      flex: 1,
+      justifyContent: 'center',
+    },
+    WebViewStyle: {
+      justifyContent: 'center',
+      alignItems: 'center',
+      flex: 1,
     },
   });
   const mapStateToProps = state => ({

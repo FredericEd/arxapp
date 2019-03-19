@@ -54,14 +54,13 @@ const styles = StyleSheet.create({
     container: {
         paddingHorizontal: 10,
         paddingVertical: 10,
-        borderRadius: 15,
         bottom: 0,
         left: 0,
         right: 0,
         position: "absolute",
     },
     image: { 
-        borderRadius: 15,
+        borderRadius: 10,
         flex: 1,
         aspectRatio:1,
     },

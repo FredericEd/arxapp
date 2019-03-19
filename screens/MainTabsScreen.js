@@ -21,12 +21,13 @@ const MainDrawerNavigator = createDrawerNavigator({
     screen: createStackNavigator({
       Main: {
         screen: HomeScreen,
-        navigationOptions: ({navigation}) => ({
+        navigationOptions: ({navigation, screenProps}) => ({
           title: 'Home', headerTintColor: '#fff',
           headerLeft: <MenuButton navigation={navigation} />,
-          headerRight: <MenuRight navigation={navigation} />,
+          headerRight: <MenuRight navigation={navigation} screenProps={screenProps} />,
           headerStyle: { backgroundColor: '#00ABD5', },
         }),
+        params: {name: "Sarah"},
       }
     }),
     navigationOptions: {
@@ -39,10 +40,10 @@ const MainDrawerNavigator = createDrawerNavigator({
     screen: createStackNavigator({
       Main: {
         screen: PerfilScreen,
-        navigationOptions: ({navigation}) => ({
+        navigationOptions: ({navigation, screenProps}) => ({
           title: 'Perfil', headerTintColor: '#fff',
           headerLeft: <MenuButton navigation={navigation} />,
-          headerRight: <MenuRight navigation={navigation} />,
+          headerRight: <MenuRight navigation={navigation} screenProps={screenProps} />,
           headerStyle: { backgroundColor: '#00ABD5', },
         }),
       }
@@ -70,18 +71,19 @@ const MainDrawerNavigator = createDrawerNavigator({
             }
           },
         }),
-        navigationOptions: ({navigation}) => ({
+        navigationOptions: ({navigation, screenProps}) => ({
           title: 'Pagos', headerTintColor: '#fff',
           headerLeft: <MenuButton navigation={navigation} />,
-          headerRight: <MenuRight navigation={navigation} />,
+          headerRight: <MenuRight navigation={navigation} screenProps={screenProps} />,
           headerStyle: { backgroundColor: '#00ABD5', },
         }),
       },
       Pago: {
         screen: PagoScreen,
-        navigationOptions: ({navigation}) => ({
+        navigationOptions: ({navigation, screenProps}) => ({
           title: 'Pago', headerTintColor: '#fff',
           headerLeft: <MenuButton navigation={navigation} />,
+          headerRight: <MenuRight navigation={navigation} screenProps={screenProps} />,
           headerStyle: { backgroundColor: '#00ABD5', },
         }),
       },
@@ -96,10 +98,10 @@ const MainDrawerNavigator = createDrawerNavigator({
     screen: createStackNavigator({
       Main: {
         screen: InvitadosScreen,
-        navigationOptions: ({navigation}) => ({
+        navigationOptions: ({navigation, screenProps}) => ({
           title: 'Invitados', headerTintColor: '#fff',
           headerLeft: <MenuButton navigation={navigation} />,
-          headerRight: <MenuRight navigation={navigation} />,
+          headerRight: <MenuRight navigation={navigation} screenProps={screenProps} />,
           headerStyle: { backgroundColor: '#00ABD5', },
         }),
       }
@@ -114,36 +116,37 @@ const MainDrawerNavigator = createDrawerNavigator({
     screen: createStackNavigator({
       ReservasList: {
         screen: ReservasScreen,
-        navigationOptions: ({navigation}) => ({
+        navigationOptions: ({navigation, screenProps}) => ({
           title: 'Reservas', headerTintColor: '#fff',
           headerLeft: <MenuButton navigation={navigation} />,
-          headerRight: <MenuRight navigation={navigation} />,
+          headerRight: <MenuRight navigation={navigation} screenProps={screenProps} />,
           headerStyle: { backgroundColor: '#00ABD5', },
         }),
       },
       Instalaciones: {
         screen: InstalacionesScreen,
-        navigationOptions: ({navigation}) => ({
+        navigationOptions: ({navigation, screenProps}) => ({
           title: 'Instalaciones', headerTintColor: '#fff',
           headerLeft: <MenuButton navigation={navigation} />,
-          headerRight: <MenuRight navigation={navigation} />,
+          headerRight: <MenuRight navigation={navigation} screenProps={screenProps} />,
           headerStyle: { backgroundColor: '#00ABD5', },
         }),
       },
       ReservaCreate: {
         screen: ReservaScreen,
-        navigationOptions: ({navigation}) => ({
+        navigationOptions: ({navigation, screenProps}) => ({
           title: 'Crear nueva reserva', headerTintColor: '#fff',
           headerLeft: <MenuButton navigation={navigation} />,
-          headerRight: <MenuRight navigation={navigation} />,
+          headerRight: <MenuRight navigation={navigation} screenProps={screenProps} />,
           headerStyle: { backgroundColor: '#00ABD5', },
         }),
       },
       Pago: {
         screen: PagoScreen,
-        navigationOptions: ({navigation}) => ({
+        navigationOptions: ({navigation, screenProps}) => ({
           title: 'Pago', headerTintColor: '#fff',
           headerLeft: <MenuButton navigation={navigation} />,
+          headerRight: <MenuRight navigation={navigation} screenProps={screenProps} />,
           headerStyle: { backgroundColor: '#00ABD5', },
         }),
       },
@@ -158,19 +161,19 @@ const MainDrawerNavigator = createDrawerNavigator({
     screen: createStackNavigator({
       Main: {
         screen: AnunciosScreen,
-        navigationOptions: ({navigation}) => ({
+        navigationOptions: ({navigation, screenProps}) => ({
           title: 'Anuncios', headerTintColor: '#fff',
           headerLeft: <MenuButton navigation={navigation} />,
-          headerRight: <MenuRight navigation={navigation} />,
+          headerRight: <MenuRight navigation={navigation} screenProps={screenProps} />,
           headerStyle: { backgroundColor: '#00ABD5', },
         }),
       },
       SingleAnuncio: {
         screen: AnuncioScreen,
-        navigationOptions: ({navigation}) => ({
+        navigationOptions: ({navigation, screenProps}) => ({
           title: 'Anuncio', headerTintColor: '#fff',
           headerLeft: <MenuButton navigation={navigation} />,
-          headerRight: <MenuRight navigation={navigation} />,
+          headerRight: <MenuRight navigation={navigation} screenProps={screenProps} />,
           headerStyle: { backgroundColor: '#00ABD5', },
         }),
       },

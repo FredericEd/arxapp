@@ -1,5 +1,5 @@
 import React from 'react';
-import { FlatList, View } from 'react-native';
+import { FlatList, ScrollView, View, Text, StyleSheet } from 'react-native';
 import { getCasas } from '../actions/apiFunctions';
 import CardCasa from '../elements/CardCasa';
 import { connect } from 'react-redux';
@@ -31,6 +31,7 @@ class CasasScreen extends React.Component {
       return (
         <View style={{flex:1}}>
           <Loader loader={this.props.loader} />
+          {this.state.elements.length > 0 &&
           <FlatList
             data={this.state.elements}
             renderItem={({ item }) => (
@@ -38,10 +39,22 @@ class CasasScreen extends React.Component {
             )}
             keyExtractor={element => "" + element.id_casa}
           />
+          }
+          {this.state.elements.length == 0 &&
+            <View>
+                <Text style={styles.emptyText}>No tiene unidades funcionales asignadas.</Text>
+            </View>
+          }
         </View>
       );
     }
 }
+const styles = StyleSheet.create({
+  emptyText:{
+    padding:10,
+    fontStyle:"italic",
+  },
+});
 const mapStateToProps = state => ({
     usuario: state.usuario,
 });

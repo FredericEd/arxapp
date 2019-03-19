@@ -1,5 +1,5 @@
 import React from 'react';
-import { FlatList, TouchableOpacity, StyleSheet, Text, View } from 'react-native';
+import { FlatList, TouchableOpacity, StyleSheet, Text, View, ScrollView } from 'react-native';
 import { getPedidos } from '../actions/apiFunctions';
 import CardReserva from '../elements/CardReserva';
 import { connect } from 'react-redux';
@@ -30,6 +30,8 @@ class ReservasScreen extends React.Component {
     }
     render() {
       return (
+        <ScrollView>
+          {this.state.elements.length > 0 &&
           <FlatList
             data={this.state.elements}
             renderItem={({ item }) => (
@@ -38,6 +40,13 @@ class ReservasScreen extends React.Component {
             keyExtractor={element => "" + element.id_instalacion_pedido}
             ListHeaderComponent= {<ReservasHeader navigation={this.props.navigation} />}
           />
+          }
+          {this.state.elements.length == 0 &&
+              <View>
+                  <Text style={styles.emptyText}>No tiene reservas futuras.</Text>
+              </View>
+          }
+          </ScrollView>
       );
     }
 }
@@ -54,6 +63,10 @@ const styles = StyleSheet.create({
       color: '#fff',
       textAlign: 'center',
       fontWeight: '700'
+  },
+  emptyText:{
+    padding:10,
+    fontStyle:"italic",
   },
 });
 const mapStateToProps = state => ({

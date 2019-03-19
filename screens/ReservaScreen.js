@@ -121,7 +121,7 @@ class ReservaScreen extends React.Component {
               </View>
               }
             </View>
-            <TouchableOpacity style={styles.buttonContainer} onPress={this.handleSaveReserva}>
+            <TouchableOpacity style={[styles.buttonContainer, {marginBottom:10}]} onPress={this.handleSaveReserva}>
               <Text style={styles.buttonText}>Reservar</Text>
             </TouchableOpacity>
           </View>
@@ -135,7 +135,7 @@ class ReservaScreen extends React.Component {
         paddingVertical: 12,
         paddingHorizontal: 30,
         marginHorizontal: 10,
-        marginTop: 10,
+        marginVertical: 10,
         borderRadius: 5,
     },
     buttonText:{

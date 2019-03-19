@@ -1,5 +1,5 @@
 import React from 'react';
-import { FlatList } from 'react-native';
+import { FlatList, StyleSheet, Text, View, ScrollView } from 'react-native';
 import { getUsuarios } from '../actions/apiFunctions';
 import CardUsuario from '../elements/CardUsuario';
 import { connect } from 'react-redux';
@@ -25,17 +25,32 @@ class InvitadosScreen extends React.Component {
   }
   render() {
       return (
-        <FlatList
-            data={this.state.elements}
-            renderItem={({ item }) => (
-              <CardUsuario usuario={item} navigation={this.props.navigation} />
-            )}
-            keyExtractor={element => "" + element.id_usuario}
-            ListHeaderComponent= {<ModalInvitado usuario={this.props.usuario} updateLoader={this.props.updateLoader}  handleUsuarios={this.handleUsuarios} />}
-        />
+        <ScrollView>
+          {this.state.elements.length > 0 &&
+            <FlatList keyboardShouldPersistTaps="always"
+                data={this.state.elements}
+                renderItem={({ item }) => (
+                  <CardUsuario usuario={item} navigation={this.props.navigation} />
+                )}
+                keyExtractor={element => "" + element.id_usuario}
+                ListHeaderComponent= {<ModalInvitado usuario={this.props.usuario} updateLoader={this.props.updateLoader}  handleUsuarios={this.handleUsuarios} />}
+            />
+          }
+          {this.state.elements.length == 0 &&
+              <View>
+                  <Text style={styles.emptyText}>No tiene invitados activos.</Text>
+              </View>
+          }
+          </ScrollView>
       );
   }
 }
+const styles = StyleSheet.create({
+  emptyText:{
+    padding:10,
+    fontStyle:"italic",
+  },
+});
 const mapStateToProps = state => ({
   usuario: state.usuario,
   casa: state.casa,

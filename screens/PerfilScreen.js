@@ -1,5 +1,5 @@
 import React from 'react';
-import { Dimensions, View, Text, StyleSheet, Image, TouchableOpacity, Linking, TextInput, Modal, ScrollView } from 'react-native';
+import { Dimensions, View, Text, StyleSheet, Image, TouchableOpacity, Linking, TextInput, Modal, ScrollView, KeyboardAvoidingView } from 'react-native';
 import Toast from 'react-native-simple-toast';
 import { connect } from 'react-redux';
 import { saveComentario, saveClave } from '../actions/apiFunctions';
@@ -25,7 +25,7 @@ class PerfilScreen extends React.Component {
       Toast.show(response["message"], Toast.LONG);
       this.setState({comentario: ""});
       this.props.updateLoader(false);
-    }
+    } else Toast.show("No puede enviar comentarios vacíos", Toast.LONG);
   }
   handleSaveClave = async () => {
     if (this.state.clave1 != "" && this.state.clave2 != "") {
@@ -49,90 +49,100 @@ class PerfilScreen extends React.Component {
   }
   render() {
     return (
-        <ScrollView>
+        <ScrollView keyboardShouldPersistTaps="always">
+        <KeyboardAvoidingView style={{ flex: 1 }} keyboardVerticalOffset={50} behavior={"position"}>
           <View style={styles.container}>
-          <Modal
-            animationType={"fade"}
-            transparent={true}
-            visible={this.state.isDialogClaveVisible}
-            onShow={() => { this.textInput.focus(); }}
-            onRequestClose={this.cancelClave}>
-            <View style={styles.modalBackground}>
-              <View style={styles.modalBody}>
-                <Text style={styles.title}>ARX</Text>
-                <Text>Ingrese su nueva clave:</Text>
-                <TextInput style = {styles.input}
-                    ref={(input) => { this.textInput = input; }}
-                    placeholder="nueva clave"
-                    value={this.state.clave1}
-                    onChangeText={this.handleClave1}
-                    maxLength = {50}
-                    secureTextEntry
-                />
-                <Text>Confirme su nueva clave:</Text>
-                <TextInput style = {styles.input}
-                    placeholder="confirme clave"
-                    value={this.state.clave2}
-                    onChangeText={this.handleClave2}
-                    maxLength = {50}
-                    secureTextEntry
-                />
-                <View style={{flexDirection: "row", marginTop: 10,}}>
-                  <View style={{flex:1}} />
-                  <TouchableOpacity style={styles.smallButton} onPress={this.cancelClave}>
-                      <Text style={styles.textLeft}>Cancelar</Text>
-                  </TouchableOpacity>
-                  <TouchableOpacity style={styles.smallButton} onPress={this.handleSaveClave}>
-                      <Text style={styles.textLeft}>Aceptar</Text>
-                  </TouchableOpacity>
+            <Modal
+              animationType={"fade"}
+              transparent={true}
+              visible={this.state.isDialogClaveVisible}
+              onShow={() => { this.textInput.focus(); }}
+              onRequestClose={this.cancelClave}>
+              <View style={styles.modalBackground}>
+                <View style={styles.modalBody}>
+                  <Text style={styles.title}>ARX</Text>
+                  <Text>Ingrese su nueva clave:</Text>
+                  <TextInput style = {styles.input}
+                      ref={(input) => { this.textInput = input; }}
+                      placeholder="nueva clave"
+                      value={this.state.clave1}
+                      onChangeText={this.handleClave1}
+                      maxLength = {50}
+                      secureTextEntry
+                  />
+                  <Text>Confirme su nueva clave:</Text>
+                  <TextInput style = {styles.input}
+                      placeholder="confirme clave"
+                      value={this.state.clave2}
+                      onChangeText={this.handleClave2}
+                      maxLength = {50}
+                      secureTextEntry
+                  />
+                  <View style={{flexDirection: "row", marginTop: 10,}}>
+                    <View style={{flex:1}} />
+                    <TouchableOpacity style={styles.smallButton} onPress={this.cancelClave}>
+                        <Text style={styles.textLeft}>Cancelar</Text>
+                    </TouchableOpacity>
+                    <TouchableOpacity style={styles.smallButton} onPress={this.handleSaveClave}>
+                        <Text style={styles.textLeft}>Aceptar</Text>
+                    </TouchableOpacity>
+                  </View>
                 </View>
               </View>
-            </View>
-          </Modal>
-            <View style={styles.container}>
-            <View style={{flexDirection: "row"}}>
-              <Image style={styles.logo} source={require('../assets/arxlogo2.jpg')} />
-            </View>
-              <View style={styles.upperText}>
-                <Image source={require('../assets/hora.png')}  style={{height: 18, width: 18, marginRight: 5}}/>
-                <Text>{this.props.usuario.cedula}</Text>
+            </Modal>
+              <View style={styles.container}>
+                <View style={{flexDirection:"row"}}>
+                  <View style={{flex:1}}/>
+                  <Image style={styles.logo} source={require('../assets/arxlogo2.png')} />
+                  <View style={{flex:1}}/>
+                </View>
+                <View style={styles.upperText}>
+                  <Image source={require('../assets/ic_phone.png')}  style={{height: 18, width: 18, marginRight: 5}}/>
+                  <Text>{this.props.usuario.cedula}</Text>
+                </View>
+                <View style={styles.upperText}>
+                  <Image source={require('../assets/ic_user.png')}  style={{height: 18, width: 18, marginRight: 5}}/>
+                  <Text>{this.props.usuario.nombre}</Text>
+                </View>
+                <View style={styles.upperText}>
+                  <Image source={require('../assets/ic_mail.png')}  style={{height: 18, width: 18, marginRight: 5}}/>
+                  <Text>{this.props.usuario.correo}</Text>
+                </View>
+                <TouchableOpacity style={styles.buttonContainer} onPress={() => this.setState({isDialogClaveVisible: true})}>
+                    <Text style={styles.buttonText}>Actualizar clave</Text>
+                </TouchableOpacity>
               </View>
-              <View style={styles.upperText}>
-                <Image source={require('../assets/ic_user.png')}  style={{height: 18, width: 18, marginRight: 5}}/>
-                <Text>{this.props.usuario.nombre}</Text>
+              <View style={styles.separator} />
+              <View style={styles.container}>
+                  <Text style={styles.title}>Contactos {this.props.casa.etapa.nombre}</Text>
+                  <View style={styles.upperText}>
+                    <Image source={require('../assets/ic_phone.png')}  style={{height: 18, width: 18, marginRight: 5}}/>
+                    <TouchableOpacity onPress={() => Linking.openURL(`tel:${this.props.casa.etapa.telefono}`)}>
+                      <Text style={styles.textLeft}>{this.props.casa.etapa.telefono}</Text>
+                    </TouchableOpacity>
+                  </View>
+                  <View style={styles.upperText}>
+                    <Image source={require('../assets/ic_mail.png')}  style={{height: 18, width: 18, marginRight: 5}}/>
+                    <TouchableOpacity onPress={() => Linking.openURL('mailto:' + this.props.casa.etapa.correo)}>
+                      <Text style={styles.textLeft}>{this.props.casa.etapa.correo}</Text>
+                    </TouchableOpacity>
+                  </View>
               </View>
-              <View style={styles.upperText}>
-                <Image source={require('../assets/ic_mail.png')}  style={{height: 18, width: 18, marginRight: 5}}/>
-                <Text>{this.props.usuario.correo}</Text>
+              <View style={styles.separator} />
+              <View style={styles.container}>
+                  <Text style={styles.title}>O envía tu comentario:</Text>
+                  <TextInput style = {[styles.input, {minHeight: 80}]}
+                    placeholder="Mensaje"
+                    value={this.state.comentario}
+                    onChangeText={this.handleComentario}
+                    multiline={true}
+                    maxLength = {500} />
+                  <TouchableOpacity style={styles.buttonContainer} onPress={this.handleSaveComentario}>
+                      <Text style={styles.buttonText}>Enviar</Text>
+                  </TouchableOpacity>
               </View>
-              <TouchableOpacity style={styles.buttonContainer} onPress={() => this.setState({isDialogClaveVisible: true})}>
-                  <Text style={styles.buttonText}>Actualizar clave</Text>
-              </TouchableOpacity>
-            </View>
-          <View style={styles.separator} />
-          <View style={styles.container}>
-              <Text style={styles.title}>Contactos {this.props.casa.etapa.nombre}</Text>
-              <TouchableOpacity onPress={() => Linking.openURL(`tel:${this.props.casa.etapa.telefono}`)}>
-                <Text style={styles.textLeft}>{this.props.casa.etapa.telefono}</Text>
-              </TouchableOpacity>
-              <TouchableOpacity onPress={() => Linking.openURL('mailto:' + this.props.casa.etapa.correo)}>
-                <Text style={styles.textLeft}>{this.props.casa.etapa.correo}</Text>
-              </TouchableOpacity>
           </View>
-          <View style={styles.separator} />
-          <View style={styles.container}>
-              <Text style={styles.title}>O envía tu comentario:</Text>
-              <TextInput style = {[styles.input, {minHeight: 80}]}
-                placeholder="Mensaje"
-                value={this.state.comentario}
-                onChangeText={this.handleComentario}
-                multiline={true}
-                maxLength = {500} />
-              <TouchableOpacity style={styles.buttonContainer} onPress={this.handleSaveComentario}>
-                  <Text style={styles.buttonText}>Enviar</Text>
-              </TouchableOpacity>
-          </View>
-          </View>
+            </KeyboardAvoidingView>
         </ScrollView>
     );
   }
@@ -149,13 +159,12 @@ const styles = StyleSheet.create({
         borderRadius: 2,
     },
     logo: {
-        flex: 1,
+        flex: 2,
         marginBottom: 10,
-        resizeMode: 'contain',
+        aspectRatio:1,
     },
     textLeft: {
-      paddingHorizontal: 10,
-      padding: 3,
+      paddingHorizontal: 5,
       color: "#79BAEC",
     },
     title: {

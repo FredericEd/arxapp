@@ -42,11 +42,10 @@ class PagosHistorial extends React.Component {
                             {
                             tableData.map((rowData, index) => (
                                 <Row
-                                key={index}
-                                data={rowData}
-                                style={[styles.row, index%2 && {backgroundColor: '#fff'}]}
-                                textStyle={styles.text}
-                                />
+                                    key={index}
+                                    data={rowData}
+                                    style={[styles.row, index%2 && {backgroundColor: '#fff'}]}
+                                    textStyle={styles.text} />
                             ))
                             }
                         </Table>
@@ -70,7 +69,6 @@ const styles = StyleSheet.create({
     emptyText:{
         padding:10,
         fontStyle:"italic",
-
     },
   });
 const mapStateToProps = state => ({

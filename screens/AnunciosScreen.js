@@ -1,5 +1,5 @@
 import React from 'react';
-import { FlatList } from 'react-native';
+import { FlatList, ScrollView, View, Text, StyleSheet } from 'react-native';
 import {getAnuncios} from '../actions/apiFunctions';
 import CardAnuncio from '../elements/CardAnuncio';
 import { connect } from 'react-redux';
@@ -24,16 +24,31 @@ class AnunciosScreen extends React.Component {
     }
     render() {
         return (
-          <FlatList
-              data={this.state.elements}
-              renderItem={({ item }) => (
-                <CardAnuncio anuncio={item} navigation={this.props.navigation} />
-              )}
-              keyExtractor={element => "" + element.id_anuncio}
-          />
+          <ScrollView>
+            {this.state.elements.length > 0 &&
+            <FlatList
+                data={this.state.elements}
+                renderItem={({ item }) => (
+                  <CardAnuncio anuncio={item} navigation={this.props.navigation} />
+                )}
+                keyExtractor={element => "" + element.id_anuncio}
+            />
+            }
+            {this.state.elements.length == 0 &&
+                <View>
+                    <Text style={styles.emptyText}>No hay anuncios disponibles.</Text>
+                </View>
+            }
+          </ScrollView>
         );
     }
 }
+const styles = StyleSheet.create({
+  emptyText:{
+    padding:10,
+    fontStyle:"italic",
+  },
+});
 const mapStateToProps = state => ({
     usuario: state.usuario,
     casa: state.casa,
