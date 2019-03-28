@@ -7,9 +7,7 @@ export default class AnunciosScreen extends React.Component {
         anuncio: {},
     }
     componentWillMount() {
-      console.log(this.props);
       this.setState({anuncio: this.props.navigation.getParam("anuncio")});
-      console.log(this.props.navigation.getParam("anuncio"));
     }
     render() {
         return (

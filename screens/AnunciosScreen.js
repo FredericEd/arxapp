@@ -17,10 +17,15 @@ class AnunciosScreen extends React.Component {
       this.didFocus.remove();
     }
     handleAnuncios = async () => {
-      this.props.updateLoader(true);
-      const elements = await getAnuncios(this.props.casa.id_etapa, this.props.usuario.api_key);
-      this.setState({elements});
-      this.props.updateLoader(false);
+      try {
+        this.props.updateLoader(true);
+        const elements = await getAnuncios(this.props.casa.id_etapa, this.props.usuario.api_key);
+        this.setState({elements});
+        this.props.updateLoader(false);
+      } catch (e) {
+          this.props.updateLoader(false);
+          Toast.show("Ha ocurrido un error. Verifique su conexión a internet.", Toast.LONG);
+      }
     }
     render() {
         return (

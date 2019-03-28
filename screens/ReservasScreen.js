@@ -24,10 +24,15 @@ class ReservasScreen extends React.Component {
       this.didFocus.remove();
     }
     handlePedidos = async () => {
-      this.props.updateLoader(true);
-      const elements = await getPedidos(this.props.casa.id_casa, this.props.usuario.api_key);
-      this.setState({elements});
-      this.props.updateLoader(false);
+      try {
+        this.props.updateLoader(true);
+        const elements = await getPedidos(this.props.casa.id_casa, this.props.usuario.api_key);
+        this.setState({elements});
+        this.props.updateLoader(false);
+      } catch (e) {
+          this.props.updateLoader(false);
+          Toast.show("Ha ocurrido un error. Verifique su conexión a internet.", Toast.LONG);
+      }
     }
     handleNewReserva = () => {
       this.props.casa.is_mora == "0" ? this.props.navigation.navigate("Instalaciones") : 

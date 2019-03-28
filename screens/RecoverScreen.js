@@ -17,37 +17,52 @@ class RecoverScreen extends React.Component {
         isDialogClaveVisible: false,
     }
     handleRecover = async () => {
-      if (this.state.cedula != "") {
-        this.props.updateLoader(true);
-        const response = await recoverClave(this.state.cedula);
-        Toast.show(response["message"], Toast.LONG);
-        this.setState({cedula2: this.state.cedula});
-        this.props.updateLoader(false);
-      } else Toast.show("Debe llenar el campo de cédula.", Toast.LONG);
+      try {
+        if (this.state.cedula != "") {
+          this.props.updateLoader(true);
+          const response = await recoverClave(this.state.cedula);
+          Toast.show(response["message"], Toast.LONG);
+          this.setState({cedula2: this.state.cedula});
+          this.props.updateLoader(false);
+        } else Toast.show("Debe llenar el campo de cédula.", Toast.LONG);
+      } catch (e) {
+          this.props.updateLoader(false);
+          Toast.show("Ha ocurrido un error. Verifique su conexión a internet.", Toast.LONG);
+      }
     }
     handleConfirm = async () => {
-      if (this.state.cedula2 != "" && this.state.codigo != "") {
-        this.props.updateLoader(true);
-        const response = await confirmClave(this.state.cedula2, this.state.codigo);
-        Toast.show(response["message"], Toast.LONG);
-        !response.error && this.setState({isDialogClaveVisible: true});
-        this.props.updateLoader(false);
-      } else Toast.show("Todos los campos son obligatorios.", Toast.LONG);
+      try {
+        if (this.state.cedula2 != "" && this.state.codigo != "") {
+          this.props.updateLoader(true);
+          const response = await confirmClave(this.state.cedula2, this.state.codigo);
+          Toast.show(response["message"], Toast.LONG);
+          !response.error && this.setState({isDialogClaveVisible: true});
+          this.props.updateLoader(false);
+        } else Toast.show("Todos los campos son obligatorios.", Toast.LONG);
+      } catch (e) {
+          this.props.updateLoader(false);
+          Toast.show("Ha ocurrido un error. Verifique su conexión a internet.", Toast.LONG);
+      }
     }
     handleSaveClave = async () => {
-      if (this.state.clave1 != "" && this.state.clave2 != "") {
-        if (this.state.clave1 != this.state.clave2) {
-          Toast.show("Las claves ingresadas no coinciden.", Toast.LONG);
-          return;
+      try {
+        if (this.state.clave1 != "" && this.state.clave2 != "") {
+          if (this.state.clave1 != this.state.clave2) {
+            Toast.show("Las claves ingresadas no coinciden.", Toast.LONG);
+            return;
+          }
+          this.props.updateLoader(true);
+          const response = await saveClave(this.state.cedula2, this.state.clave1, this.state.codigo);
+          Toast.show(response["message"], Toast.LONG);
+          if (!response.error){
+              this.cancelDialog();
+              this.props.navigation.dispatch(StackActions.popToTop())
+          } else Toast.show("Todos los campos son obligatorios.", Toast.LONG);
+          this.props.updateLoader(false);
         }
-        this.props.updateLoader(true);
-        const response = await saveClave(this.state.cedula2, this.state.clave1, this.state.codigo);
-        Toast.show(response["message"], Toast.LONG);
-        if (!response.error){
-            this.cancelDialog();
-            this.props.navigation.dispatch(StackActions.popToTop())
-        } else Toast.show("Todos los campos son obligatorios.", Toast.LONG);
-        this.props.updateLoader(false);
+      } catch (e) {
+          this.props.updateLoader(false);
+          Toast.show("Ha ocurrido un error. Verifique su conexión a internet.", Toast.LONG);
       }
     }
     cancelDialog = () =>  this.setState({isDialogClaveVisible: false});
@@ -98,7 +113,7 @@ class RecoverScreen extends React.Component {
                 </View>
               </View>
             </Modal>
-            <KeyboardAvoidingView style={{ flex: 1 }} keyboardVerticalOffset={50} behavior={"position"}>
+            <KeyboardAvoidingView style={{ flex: 1 }} keyboardVerticalOffset={30} behavior={"position"}>
               <View style={{flexDirection:"row"}}>
                   <View style={{flex:1}}/>
                   <Text style={styles.title}>Recuperación de clave</Text>

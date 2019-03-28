@@ -18,10 +18,15 @@ class InvitadosScreen extends React.Component {
     this.didFocus.remove();
   }
   handleUsuarios = async () => {
-    this.props.updateLoader(true);
-    const elements = await getUsuarios(this.props.casa.id_casa, "4", this.props.usuario.api_key);
-    this.setState({elements});
-    this.props.updateLoader(false);
+    try {
+      this.props.updateLoader(true);
+      const elements = await getUsuarios(this.props.casa.id_casa, "4", this.props.usuario.api_key);
+      this.setState({elements});
+      this.props.updateLoader(false);
+    } catch (e) {
+        this.props.updateLoader(false);
+        Toast.show("Ha ocurrido un error. Verifique su conexión a internet.", Toast.LONG);
+    }
   }
   render() {
       return (

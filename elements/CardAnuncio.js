@@ -25,7 +25,7 @@ export default class CardReserva extends React.Component {
                             <Image source={require('../assets/hora.png')}  style={{height: 18, width: 18, marginRight: 5}}/>
                             <Text style={styles.date}>{this.props.anuncio.fecha}</Text>
                         </View>
-                        <Text style={styles.title}>{this.props.anuncio.titulo}</Text>
+                        <Text numberOfLines={2} style={styles.title}>{this.props.anuncio.titulo}</Text>
                     </View>
                     <Image source={{uri: `https://arxsmart.com/api/uploads/images/${this.props.anuncio.imagen}`}} style={[styles.image, {height: this.state.imgh}]} />
                 </View>
@@ -61,7 +61,7 @@ const styles = StyleSheet.create({
     title: {
         fontWeight: "bold",
         marginTop: 5,
-        fontSize: 17,
+        fontSize: 16,
     },
     image: {
         flex: 1,

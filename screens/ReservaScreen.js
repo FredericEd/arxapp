@@ -22,13 +22,18 @@ class ReservaScreen extends React.Component {
     handleHoras = horas => this.setState({horas});
     
     handleSaveReserva = async () => {
-      if (this.state.fecha != "" && this.state.time != "" && this.state.horas != "") {
-        this.props.updateLoader(true);
-        const response = await saveReserva(this.props.casa.id_casa, this.state.instalacion.id_instalacion, this.state.fecha, this.state.time,this.state.horas ,this.props.usuario.api_key);
-        Toast.show(response["message"], Toast.LONG);
-        response["error"] == false && this.props.navigation.navigate("Pago", {id_instalacion_pedido: response["id"], token: this.props.usuario.api_key});
-        this.props.updateLoader(false);
-      } else Toast.show("Todos los campos son obligatorios", Toast.LONG);
+      try {
+        if (this.state.fecha != "" && this.state.time != "" && this.state.horas != "") {
+          this.props.updateLoader(true);
+          const response = await saveReserva(this.props.casa.id_casa, this.state.instalacion.id_instalacion, this.state.fecha, this.state.time,this.state.horas ,this.props.usuario.api_key);
+          Toast.show(response["message"], Toast.LONG);
+          response["error"] == false && this.props.navigation.navigate("Pago", {id_instalacion_pedido: response["id"], token: this.props.usuario.api_key});
+          this.props.updateLoader(false);
+        } else Toast.show("Todos los campos son obligatorios", Toast.LONG);
+      } catch (e) {
+          this.props.updateLoader(false);
+          Toast.show("Ha ocurrido un error. Verifique su conexión a internet.", Toast.LONG);
+      }
     }
     componentWillMount() {
       const today = new Date();

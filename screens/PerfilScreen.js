@@ -19,27 +19,37 @@ class PerfilScreen extends React.Component {
   handleClave1 = clave1 => this.setState({clave1});
   handleClave2 = clave2 => this.setState({clave2});
   handleSaveComentario = async () => {
-    if (this.props.casa.is_mora == "0") {
-      if (this.state.comentario != "") {
-        this.props.updateLoader(true);
-        const response = await saveComentario("3", this.state.comentario, this.props.usuario.api_key);
-        Toast.show(response["message"], Toast.LONG);
-        this.setState({comentario: ""});
+    try {
+      if (this.props.casa.is_mora == "0") {
+        if (this.state.comentario != "") {
+          this.props.updateLoader(true);
+          const response = await saveComentario("3", this.state.comentario, this.props.usuario.api_key);
+          Toast.show(response["message"], Toast.LONG);
+          this.setState({comentario: ""});
+          this.props.updateLoader(false);
+        } else Toast.show("No puede enviar comentarios vacíos", Toast.LONG);
+      } else Toast.show("No puede acceder a esta funcionalidad mientras esté en mora.", Toast.LONG);
+    } catch (e) {
         this.props.updateLoader(false);
-      } else Toast.show("No puede enviar comentarios vacíos", Toast.LONG);
-    } else Toast.show("No puede acceder a esta funcionalidad mientras esté en mora.", Toast.LONG);
+        Toast.show("Ha ocurrido un error. Verifique su conexión a internet.", Toast.LONG);
+    }
   }
   handleSaveClave = async () => {
-    if (this.state.clave1 != "" && this.state.clave2 != "") {
-      if (this.state.clave1 != this.state.clave2) {
-        Toast.show("Las claves ingresadas no coinciden.", Toast.LONG);
-        return;
+    try {
+      if (this.state.clave1 != "" && this.state.clave2 != "") {
+        if (this.state.clave1 != this.state.clave2) {
+          Toast.show("Las claves ingresadas no coinciden.", Toast.LONG);
+          return;
+        }
+        this.props.updateLoader(true);
+        const response = await saveClave(this.state.clave1, this.props.usuario.api_key);
+        Toast.show(response["message"], Toast.LONG);
+        !response.error && this.cancelClave();
+        this.props.updateLoader(false);
       }
-      this.props.updateLoader(true);
-      const response = await saveClave(this.state.clave1, this.props.usuario.api_key);
-      Toast.show(response["message"], Toast.LONG);
-      !response.error && this.cancelClave();
-      this.props.updateLoader(false);
+    } catch (e) {
+        this.props.updateLoader(false);
+        Toast.show("Ha ocurrido un error. Verifique su conexión a internet.", Toast.LONG);
     }
   }
   cancelClave = () => {

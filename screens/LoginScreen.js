@@ -12,16 +12,21 @@ class LoginScreen extends React.Component {
         clave: '',
     }
     handleLogin = async () => {
-        if (this.state.correo != "" && this.state.clave != "") {
-            this.props.updateLoader(true);
-            const response = await login(this.state.correo, this.state.clave);
-            Toast.show(response[1]["message"], Toast.LONG);
+        try {
+            if (this.state.correo != "" && this.state.clave != "") {
+                this.props.updateLoader(true);
+                const response = await login(this.state.correo, this.state.clave);
+                Toast.show(response[1]["message"], Toast.LONG);
+                this.props.updateLoader(false);
+                if (response[0]) {
+                    this.props.updateUser(response[1]["usuario"]);
+                    this.props.navigation.navigate('Casas');
+                }
+            } else Toast.show("Todos los campos son obligatorios.", Toast.LONG);
+        } catch (e) {
             this.props.updateLoader(false);
-            if (response[0]) {
-                this.props.updateUser(response[1]["usuario"]);
-                this.props.navigation.navigate('Casas');
-            }
-        } else Toast.show("Todos los campos son obligatorios.", Toast.LONG);
+            Toast.show("Ha ocurrido un error. Verifique su conexión a internet.", Toast.LONG);
+        }
     }
     handleCorreo = correo => this.setState({correo});
     handleClave = clave => this.setState({clave});

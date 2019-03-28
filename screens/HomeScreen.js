@@ -28,11 +28,16 @@ class HomeScreen extends React.Component {
     }
     changeDialogState = isDialogVisible => this.setState({isDialogVisible});
     handleSaveEmergencia = async () => {
+      try {
         this.changeDialogState(false);
         this.props.updateLoader(true);
         const response = await saveEmergencia(this.props.casa.id_casa, this.props.usuario.api_key);
         Toast.show(response["message"], Toast.LONG);
         this.props.updateLoader(false);
+      } catch (e) {
+          this.props.updateLoader(false);
+          Toast.show("Ha ocurrido un error. Verifique su conexión a internet.", Toast.LONG);
+      }
     }
     lastTap = null;
     handleDoubleTap = () => {
@@ -58,7 +63,7 @@ class HomeScreen extends React.Component {
         const base64 = qrcode(this.props.usuario.id_usuario + "." + this.props.casa.id_casa + "." + code + "." + this.state.alarma);
         this.setState({base64, code});
       }
-    } 
+    }
     registerForPushNotificationsAsync = async (token) => {
       try {
         const { status: existingStatus } = await Permissions.getAsync(Permissions.NOTIFICATIONS);
