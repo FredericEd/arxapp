@@ -5,6 +5,7 @@ import { PersistGate } from 'redux-persist/integration/react';
 import LoginScreen from './screens/LoginScreen';
 import RecoverScreen from './screens/RecoverScreen';
 import MainContainerScreen from './screens/MainContainerScreen';
+import MainInvitadoScreen from './screens/MainInvitadoScreen';
 import CasasScreen from './screens/CasasScreen';
 import {store, persistor} from './redux/store';
 
@@ -34,6 +35,7 @@ const MainNavigator = createSwitchNavigator({
       }),
     }
   }),
+  Invitado: MainInvitadoScreen,
 },
 {
   initialRouteName: 'Auth',

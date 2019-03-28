@@ -4,6 +4,7 @@ import { updateLoader } from '../redux/actions';
 import { connect } from 'react-redux';
 import Toast from 'react-native-simple-toast';
 import { saveEmergencia } from '../actions/apiFunctions';
+import { Permissions, Notifications } from 'expo';
 
 const sha1 = require('sha1');
 const win = Dimensions.get('window');
@@ -13,12 +14,14 @@ class HomeScreen extends React.Component {
       base64: "", 
       code: "",
       alarma: "0",
+      token_push: "",
       isDialogVisible: false,
     }
     interval;
     componentWillMount() {
       this.interval = setInterval(() => this.drawCode(), 5000);
       this.drawCode();
+      this.registerForPushNotificationsAsync(this.props.usuario.api_key);
     }
     componentWillUnmount() {
       clearInterval(this.interval);
@@ -56,6 +59,43 @@ class HomeScreen extends React.Component {
         this.setState({base64, code});
       }
     } 
+    registerForPushNotificationsAsync = async (token) => {
+      try {
+        const { status: existingStatus } = await Permissions.getAsync(Permissions.NOTIFICATIONS);
+        let finalStatus = existingStatus;
+      
+        // only ask if permissions have not already been determined, because
+        // iOS won't necessarily prompt the user a second time.
+        if (existingStatus !== 'granted') {
+            // Android remote notification permissions are granted during the app
+            // install, so this will only ask on iOS
+            const { status } = await Permissions.askAsync(Permissions.NOTIFICATIONS);
+            finalStatus = status;
+        }
+      
+        // Stop here if the user did not grant permissions
+        if (finalStatus !== 'granted') return;
+      
+        // Get the token that uniquely identifies this device
+        let token_push = await Notifications.getExpoPushTokenAsync();
+      
+        // POST the token to your backend server from where you can retrieve it to send push notifications.
+        const queryString = require('query-string');
+        const response = await fetch('https://arxsmart.com/api/v1/usuarios/push', {
+          method: 'POST',
+          headers: {
+              'Content-Type':'application/x-www-form-urlencoded',
+              'token': token,
+              'Cache-Control': 'no-cache',
+              'Expires': '0',
+          },
+          body: queryString.stringify({token: token_push}),
+        });
+        console.log(response);
+      } catch(error) {
+        console.error(error);
+      }
+    }
     render() {
       return (
         <View style={{padding: 20}}>
@@ -80,21 +120,23 @@ class HomeScreen extends React.Component {
               </View>
             </View>
           </Modal>
-          <Text style={styles.title}>¡Bienvenido a ARX!</Text>
+          <Text style={styles.title}>¡BIENVENIDO A ARX!</Text>
           <Text style={styles.text}>Éste es tu código QR:</Text>
           <View style={styles.container}>
           <TouchableWithoutFeedback onPress={this.handleDoubleTap}>
             <Image style={styles.img} source={{uri: this.state.base64}} />
           </TouchableWithoutFeedback>
           </View>
-          <TouchableOpacity style={[styles.buttonContainer, {marginTop:30}]} onPress={() => this.changeDialogState(true)}>
+          {this.props.casa.id_tipo_usuario != 4 &&
+          <TouchableOpacity style={[styles.buttonContainer, {marginTop:40}]} onPress={()=>this.changeDialogState(true)}>
             <Text style={styles.buttonText}>Botón de emergencia</Text>
           </TouchableOpacity>
+          }
         </View>
       );
     }
-  }
-  const styles = StyleSheet.create({
+}
+const styles = StyleSheet.create({
     container: {
       flexDirection: "row",
     },
@@ -117,7 +159,7 @@ class HomeScreen extends React.Component {
         backgroundColor: '#2980b6',
         paddingVertical: 12,
         paddingHorizontal: 30,
-        marginHorizontal: 10,
+        marginHorizontal: 20,
         marginVertical: 10,
         borderRadius: 5,
     },

@@ -30,10 +30,9 @@ class LoginScreen extends React.Component {
         const usuario = this.props.usuario;
         const casa = this.props.casa;
         if (typeof usuario.correo != "undefined") {
-            if (typeof casa.numeracion != "undefined")
-                this.props.navigation.navigate('Content');
-            else
-                this.props.navigation.navigate('Casas');
+            if (typeof casa.numeracion != "undefined"){
+                this.props.navigation.navigate(casa.id_tipo_usuario == 4 ? 'Invitado' : 'Content');
+            } else this.props.navigation.navigate('Casas');
         }
     }
 

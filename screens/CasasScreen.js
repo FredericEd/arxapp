@@ -17,15 +17,12 @@ class CasasScreen extends React.Component {
       this.props.updateLoader(true);
       const elements = await getCasas(this.props.usuario.api_key);
       this.setState({elements});
-      if (elements.length == 1) {
-        this.props.updateCasa(elements[0]);
-        this.props.navigation.navigate('Content');
-      }
+      elements.length == 1 && this.updateCasa(elements[0]);
       this.props.updateLoader(false);
     }
     updateCasa = casa => {
       this.props.updateCasa(casa);
-      this.props.navigation.navigate('Content');
+      this.props.navigation.navigate(casa.id_tipo_usuario == 4 ? 'Invitado' :  'Content');
     }
     render() {
       return (

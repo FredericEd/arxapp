@@ -19,13 +19,15 @@ class PerfilScreen extends React.Component {
   handleClave1 = clave1 => this.setState({clave1});
   handleClave2 = clave2 => this.setState({clave2});
   handleSaveComentario = async () => {
-    if (this.state.comentario != "") {
-      this.props.updateLoader(true);
-      const response = await saveComentario("3", this.state.comentario, this.props.usuario.api_key);
-      Toast.show(response["message"], Toast.LONG);
-      this.setState({comentario: ""});
-      this.props.updateLoader(false);
-    } else Toast.show("No puede enviar comentarios vacíos", Toast.LONG);
+    if (this.props.casa.is_mora == "0") {
+      if (this.state.comentario != "") {
+        this.props.updateLoader(true);
+        const response = await saveComentario("3", this.state.comentario, this.props.usuario.api_key);
+        Toast.show(response["message"], Toast.LONG);
+        this.setState({comentario: ""});
+        this.props.updateLoader(false);
+      } else Toast.show("No puede enviar comentarios vacíos", Toast.LONG);
+    } else Toast.show("No puede acceder a esta funcionalidad mientras esté en mora.", Toast.LONG);
   }
   handleSaveClave = async () => {
     if (this.state.clave1 != "" && this.state.clave2 != "") {
@@ -130,7 +132,7 @@ class PerfilScreen extends React.Component {
               </View>
               <View style={styles.separator} />
               <View style={styles.container}>
-                  <Text style={styles.title}>O envía tu comentario:</Text>
+                  <Text style={styles.title}>Envía tu comentario:</Text>
                   <TextInput style = {[styles.input, {minHeight: 80}]}
                     placeholder="Mensaje"
                     value={this.state.comentario}

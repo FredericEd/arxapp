@@ -1,0 +1,42 @@
+{
+  "project_info": {
+    "project_number": "243038542767",
+    "firebase_url": "https://arx-messaging.firebaseio.com",
+    "project_id": "arx-messaging",
+    "storage_bucket": "arx-messaging.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:243038542767:android:97443f219aeff95b",
+        "android_client_info": {
+          "package_name": "com.tymsmart.arx"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "243038542767-rke5etabb314md7c5vf2o9jk3egttdbq.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCt96JFmjeTue2x9lGXydgMnObw181eQrY"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

@@ -59,7 +59,7 @@ class RecoverScreen extends React.Component {
 
     render() {
       return (
-        <ScrollView>
+        <ScrollView keyboardShouldPersistTaps="always">
           <Loader loader={this.props.loader} />
           <View style={styles.container}>
             <Modal
@@ -98,7 +98,7 @@ class RecoverScreen extends React.Component {
                 </View>
               </View>
             </Modal>
-            <KeyboardAvoidingView style={{ flex: 1 }} keyboardVerticalOffset={100} behavior={"position"}>
+            <KeyboardAvoidingView style={{ flex: 1 }} keyboardVerticalOffset={50} behavior={"position"}>
               <View style={{flexDirection:"row"}}>
                   <View style={{flex:1}}/>
                   <Text style={styles.title}>Recuperación de clave</Text>

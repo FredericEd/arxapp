@@ -27,7 +27,11 @@
       "bundleIdentifier": "com.tymsmart.arx"
     },
     "android": {
-      "package": "com.tymsmart.arx"
+      "package": "com.tymsmart.arx",
+      "googleServicesFile": "./google-services.json"
+    },
+    "notification": {
+      "icon": "./assets/icon.png"
     }
   }
 }

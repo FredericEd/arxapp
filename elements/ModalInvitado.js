@@ -48,13 +48,18 @@ export default class ModalInvitado extends React.Component {
           Toast.show("La cantidad debe estar entre 1 y 5.", Toast.LONG);
           return;
         }
+        this.cancelUsuario();
         this.props.updateLoader(true);
         const response = await saveUsuario(this.state.id_usuario, this.state.cantidad, this.state.id_casa, this.state.cedula, this.state.nombre, this.state.correo, this.state.telefono, this.props.usuario.api_key);
         Toast.show(response["message"], Toast.LONG);
-        !response.error && this.cancelUsuario() && this.props.handleUsuarios();
+        !response.error && this.props.handleUsuarios();
         this.props.updateLoader(false);
         break;
     }
+  }
+  handleNewInvitado = () => {
+    this.props.casa.is_mora == "0" ? this.setState({isDialogVisible: true}): 
+    Toast.show("No puede acceder a esta funcionalidad mientras esté en mora.", Toast.LONG);
   }
   cancelUsuario = () => {
     this.setState({
@@ -71,8 +76,8 @@ export default class ModalInvitado extends React.Component {
   }
   render() {
       return (
-        <View>
-            <TouchableOpacity style={styles.buttonContainer} onPress={() => this.setState({isDialogVisible: true})}>
+        <View keyboardShouldPersistTaps="always">
+            <TouchableOpacity style={styles.buttonContainer} onPress={this.handleNewInvitado}>
               <Text style={styles.buttonText}>Nuevo invitado</Text>
             </TouchableOpacity>
           <Modal
@@ -87,7 +92,7 @@ export default class ModalInvitado extends React.Component {
                 {this.state.paso == 0 &&
                 <View>
                   <Text>Ingrese la cédula del invitado o invitada:</Text>
-                  <TextInput style = {styles.input}
+                  <TextInput style = {styles.input} 
                       ref={(input) => { this.textCedula = input; }}
                       placeholder="cédula"
                       keyboardType="number-pad"

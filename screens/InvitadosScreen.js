@@ -26,16 +26,14 @@ class InvitadosScreen extends React.Component {
   render() {
       return (
         <ScrollView>
-          {this.state.elements.length > 0 &&
-            <FlatList keyboardShouldPersistTaps="always"
+            <FlatList
                 data={this.state.elements}
                 renderItem={({ item }) => (
                   <CardUsuario usuario={item} navigation={this.props.navigation} />
                 )}
                 keyExtractor={element => "" + element.id_usuario}
-                ListHeaderComponent= {<ModalInvitado usuario={this.props.usuario} updateLoader={this.props.updateLoader}  handleUsuarios={this.handleUsuarios} />}
+                ListHeaderComponent= {<ModalInvitado casa={this.props.casa} usuario={this.props.usuario} updateLoader={this.props.updateLoader}  handleUsuarios={this.handleUsuarios} />}
             />
-          }
           {this.state.elements.length == 0 &&
               <View>
                   <Text style={styles.emptyText}>No tiene invitados activos.</Text>

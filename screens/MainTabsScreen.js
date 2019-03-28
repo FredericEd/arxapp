@@ -27,7 +27,6 @@ const MainDrawerNavigator = createDrawerNavigator({
           headerRight: <MenuRight navigation={navigation} screenProps={screenProps} />,
           headerStyle: { backgroundColor: '#00ABD5', },
         }),
-        params: {name: "Sarah"},
       }
     }),
     navigationOptions: {

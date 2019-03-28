@@ -4,10 +4,11 @@ import { getPedidos } from '../actions/apiFunctions';
 import CardReserva from '../elements/CardReserva';
 import { connect } from 'react-redux';
 import { updateLoader } from '../redux/actions';
+import Toast from 'react-native-simple-toast';
 
 const ReservasHeader = props => {
   return (
-      <TouchableOpacity style={styles.buttonContainer} onPress={() => props.navigation.navigate("Instalaciones")}>
+      <TouchableOpacity style={styles.buttonContainer} onPress={props.handleNewReserva}>
         <Text  style={styles.buttonText}>Nueva reseva</Text>
       </TouchableOpacity>
   );
@@ -28,19 +29,21 @@ class ReservasScreen extends React.Component {
       this.setState({elements});
       this.props.updateLoader(false);
     }
+    handleNewReserva = () => {
+      this.props.casa.is_mora == "0" ? this.props.navigation.navigate("Instalaciones") : 
+      Toast.show("No puede acceder a esta funcionalidad mientras esté en mora.", Toast.LONG);
+    }
     render() {
       return (
         <ScrollView>
-          {this.state.elements.length > 0 &&
           <FlatList
             data={this.state.elements}
             renderItem={({ item }) => (
               <CardReserva pedido={item} />
             )}
             keyExtractor={element => "" + element.id_instalacion_pedido}
-            ListHeaderComponent= {<ReservasHeader navigation={this.props.navigation} />}
+            ListHeaderComponent= {<ReservasHeader handleNewReserva={this.handleNewReserva} />}
           />
-          }
           {this.state.elements.length == 0 &&
               <View>
                   <Text style={styles.emptyText}>No tiene reservas futuras.</Text>
