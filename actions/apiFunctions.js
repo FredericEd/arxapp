@@ -89,7 +89,6 @@ export const getCasas = async (token) => {
 }
 
 export const getDeudas = async (id_casa, token) => {
-    console.log('https://arxsmart.com/api/v1/usuarios/casas/' + id_casa + '/deudas');
     const response = await fetch('https://arxsmart.com/api/v1/usuarios/casas/' + id_casa + '/deudas', {
         method: 'GET',
         headers: {
@@ -102,6 +101,21 @@ export const getDeudas = async (id_casa, token) => {
     const json = await response.json();
     console.log(json);
     return typeof json.deudas  == 'undefined' ? [] : json.deudas;
+}
+
+export const getVisitantes = async (id_casa, token) => {
+    const response = await fetch('https://arxsmart.com/api/v1/usuarios/casas/' + id_casa + '/visitantes', {
+        method: 'GET',
+        headers: {
+            'Content-Type':'application/x-www-form-urlencoded',
+            'token': token,
+            'Cache-Control': 'no-cache',
+            'Expires': '0',
+        }
+    });
+    const json = await response.json();
+    console.log(json);
+    return typeof json.visitantes  == 'undefined' ? [] : json.visitantes;
 }
 
 export const getUsuariosByCedula = async (cedula, token) => {
@@ -119,6 +133,21 @@ export const getUsuariosByCedula = async (cedula, token) => {
     const json = await response.json();
     console.log(json);
     return typeof json.usuarios  == 'undefined' ? [] : json.usuarios;
+}
+
+export const getNotificaciones = async token => {
+    const response = await fetch('https://arxsmart.com/api/v1/notificaciones', {
+        method: 'GET',
+        headers: {
+            'Content-Type':'application/x-www-form-urlencoded',
+            'token': token,
+            'Cache-Control': 'no-cache',
+            'Expires': '0',
+        }
+    });
+    const json = await response.json();
+    console.log(json);
+    return typeof json.notificaciones  == 'undefined' ? [] : json.notificaciones;
 }
 
 export const saveComentario = async (id_casa, comentario, token) => {
@@ -200,6 +229,23 @@ export const saveEmergencia = async (id_casa, token) => {
             'Expires': '0',
         },
         body: queryString.stringify({id_casa}),
+    });
+    const json = await response.json();
+    console.log(json);
+    return json;
+}
+
+export const saveNotificaciones = async (data, token) => {
+    const queryString = require('query-string');
+    const response = await fetch('https://arxsmart.com/api/v1/notificaciones', {
+        method: 'POST',
+        headers: {
+            'Content-Type':'application/x-www-form-urlencoded',
+            'token': token,
+            'Cache-Control': 'no-cache',
+            'Expires': '0',
+        },
+        body: queryString.stringify({data}),
     });
     const json = await response.json();
     console.log(json);

@@ -27,7 +27,7 @@ class CasasScreen extends React.Component {
     }
     updateCasa = casa => {
       this.props.updateCasa(casa);
-      this.props.navigation.navigate(casa.id_tipo_usuario == 4 ? 'Invitado' :  'Content');
+      this.props.navigation.navigate((casa.id_tipo_usuario == 4 || casa.id_tipo_usuario == 3) ? 'Invitado' :  'Content');
     }
     render() {
       return (

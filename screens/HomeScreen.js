@@ -1,6 +1,6 @@
 import React from 'react';
 import { Dimensions, Image, StyleSheet, View, Text, TouchableOpacity, Modal, TouchableWithoutFeedback } from 'react-native';
-import { updateLoader } from '../redux/actions';
+import { updateCasa, updateLoader } from '../redux/actions';
 import { connect } from 'react-redux';
 import Toast from 'react-native-simple-toast';
 import { saveEmergencia } from '../actions/apiFunctions';
@@ -21,9 +21,12 @@ class HomeScreen extends React.Component {
     componentWillMount() {
       this.interval = setInterval(() => this.drawCode(), 5000);
       this.drawCode();
-      this.registerForPushNotificationsAsync(this.props.usuario.api_key);
+    }
+    componentDidMount() {
+      this.didFocus = this.props.navigation.addListener('didFocus', () => this.registerForPushNotificationsAsync(this.props.usuario.api_key, this.props.casa.id_casa));
     }
     componentWillUnmount() {
+      this.didFocus.remove();
       clearInterval(this.interval);
     }
     changeDialogState = isDialogVisible => this.setState({isDialogVisible});
@@ -64,41 +67,30 @@ class HomeScreen extends React.Component {
         this.setState({base64, code});
       }
     }
-    registerForPushNotificationsAsync = async (token) => {
+    registerForPushNotificationsAsync = async (token, id_casa) => {
       try {
         const { status: existingStatus } = await Permissions.getAsync(Permissions.NOTIFICATIONS);
         let finalStatus = existingStatus;
-      
-        // only ask if permissions have not already been determined, because
-        // iOS won't necessarily prompt the user a second time.
         if (existingStatus !== 'granted') {
-            // Android remote notification permissions are granted during the app
-            // install, so this will only ask on iOS
             const { status } = await Permissions.askAsync(Permissions.NOTIFICATIONS);
             finalStatus = status;
         }
-      
-        // Stop here if the user did not grant permissions
         if (finalStatus !== 'granted') return;
       
-        // Get the token that uniquely identifies this device
         let token_push = await Notifications.getExpoPushTokenAsync();
-      
-        // POST the token to your backend server from where you can retrieve it to send push notifications.
         const queryString = require('query-string');
         const response = await fetch('https://arxsmart.com/api/v1/usuarios/push', {
           method: 'POST',
           headers: {
-              'Content-Type':'application/x-www-form-urlencoded',
-              'token': token,
-              'Cache-Control': 'no-cache',
-              'Expires': '0',
+              'Content-Type':'application/x-www-form-urlencoded', 'token': token, 'Cache-Control': 'no-cache', 'Expires': '0',
           },
-          body: queryString.stringify({token: token_push}),
-        });
-        console.log(response);
+          body: queryString.stringify({token: token_push, id_casa}),
+        }); 
+        const json = await response.json();
+        typeof json.casa["id_casa"] != "undefined" && this.props.updateCasa(json.casa);
+        return json.casa;
       } catch(error) {
-        console.error(error);
+        return [];
       }
     }
     render() {
@@ -197,4 +189,4 @@ const styles = StyleSheet.create({
     usuario: state.usuario,
     casa: state.casa,
   });
-export default connect(mapStateToProps, {updateLoader: updateLoader})(HomeScreen);
+export default connect(mapStateToProps, {updateLoader: updateLoader, updateCasa: updateCasa})(HomeScreen);

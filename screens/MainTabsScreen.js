@@ -11,6 +11,8 @@ import PagosPendientesScreen from './PagosPendientesScreen';
 import ReservasScreen from './ReservasScreen';
 import PagoScreen from './PagoScreen';
 import InstalacionesScreen from './InstalacionesScreen';
+import ConfiguracionesScreen from './ConfiguracionesScreen';
+import VisitantesHistorial from './VisitantesHistorial';
 import ReservaScreen from './ReservaScreen';
 import MenuButton from '../elements/MenuButton';
 import MenuRight from '../elements/MenuRight';
@@ -179,27 +181,46 @@ const MainDrawerNavigator = createDrawerNavigator({
     }),
     navigationOptions: {
       drawerLabel: 'Anuncios',
-      drawerIcon: ({ tintColor }) => 
+      drawerIcon: ({ tintColor }) =>
         <Image source={require('../assets/ic_anuncios.png')} style={[styles.icon, {tintColor}]} />,
     },
   },
-  /*Historial: {
+  HistorialVisitas: {
     screen: createStackNavigator({
       Main: {
-        screen: HistorialScreen,
-        navigationOptions: ({navigation}) => ({
-          title: 'Historial', headerTintColor: '#fff',
+        screen: VisitantesHistorial,
+        navigationOptions: ({navigation, screenProps}) => ({
+          title: 'Historial visitas', headerTintColor: '#fff',
           headerLeft: <MenuButton navigation={navigation} />,
+          headerRight: <MenuRight navigation={navigation} screenProps={screenProps} />,
           headerStyle: { backgroundColor: '#00ABD5', },
         }),
-      }
+      },
     }),
     navigationOptions: {
-      drawerLabel: 'Historial',
-      drawerIcon: ({ tintColor }) => 
+      drawerLabel: 'Historial visitas',
+      drawerIcon: ({ tintColor }) =>
         <Image source={require('../assets/ic_historial.png')} style={[styles.icon, {tintColor}]} />,
     },
-  },*/
+  },
+  Configuraciones: {
+    screen: createStackNavigator({
+      Main: {
+        screen: ConfiguracionesScreen,
+        navigationOptions: ({navigation, screenProps}) => ({
+          title: 'Configuraciones', headerTintColor: '#fff',
+          headerLeft: <MenuButton navigation={navigation} />,
+          headerRight: <MenuRight navigation={navigation} screenProps={screenProps} />,
+          headerStyle: { backgroundColor: '#00ABD5', },
+        }),
+      },
+    }),
+    navigationOptions: {
+      drawerLabel: 'Configuraciones',
+      drawerIcon: ({ tintColor }) =>
+        <Image source={require('../assets/ic_conf.png')} style={[styles.icon, {tintColor}]} />,
+    },
+  },
 }, {
   contentComponent:CustomDrawerContentComponent,
 });
