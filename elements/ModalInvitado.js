@@ -1,6 +1,6 @@
 import React from 'react';
 import { View, Text, StyleSheet, TouchableOpacity, TextInput, Modal } from 'react-native';
-import Toast from 'react-native-simple-toast';
+import Toast from 'react-native-root-toast';
 import { saveUsuario, getUsuariosByCedula } from '../actions/apiFunctions';
 
 export default class ModalInvitado extends React.Component {
@@ -33,25 +33,40 @@ export default class ModalInvitado extends React.Component {
             this.setState({paso: 1});
             this.textNombre.focus();
           }
-        } else Toast.show("La cédula debe tener 10 caracteres.", Toast.LONG);
+        } else Toast.show("La cédula debe tener 10 caracteres.", {
+          duration: Toast.durations.LONG,
+          position: Toast.positions.BOTTOM,
+        });
         break;
       case 1:
         if (this.state.nombre == "" || this.state.correo == "" || this.state.telefono == "") {
-          Toast.show("Todos los campos son requeridos.", Toast.LONG);
+          Toast.show("Todos los campos son requeridos.", {
+            duration: Toast.durations.LONG,
+            position: Toast.positions.BOTTOM,
+          });
           return;
         }
       case 2:
         if (this.state.cantidad.length == 0) {
-          Toast.show("Debe ingresar la cantidad de veces que podrá ingresar.", Toast.LONG);
+          Toast.show("Debe ingresar la cantidad de veces que podrá ingresar.", {
+            duration: Toast.durations.LONG,
+            position: Toast.positions.BOTTOM,
+          });
           return;
         } else if (parseInt(this.state.cantidad) < 1 || parseInt(this.state.cantidad) > 5) {
-          Toast.show("La cantidad debe estar entre 1 y 5.", Toast.LONG);
+          Toast.show("La cantidad debe estar entre 1 y 5.", {
+            duration: Toast.durations.LONG,
+            position: Toast.positions.BOTTOM,
+          });
           return;
         }
         this.cancelUsuario();
         this.props.updateLoader(true);
         const response = await saveUsuario(this.state.id_usuario, this.state.cantidad, this.state.id_casa, this.state.cedula, this.state.nombre, this.state.correo, this.state.telefono, this.props.usuario.api_key);
-        Toast.show(response["message"], Toast.LONG);
+        Toast.show(response["message"], {
+          duration: Toast.durations.LONG,
+          position: Toast.positions.BOTTOM,
+        });
         !response.error && this.props.handleUsuarios();
         this.props.updateLoader(false);
         break;
@@ -59,7 +74,10 @@ export default class ModalInvitado extends React.Component {
   }
   handleNewInvitado = () => {
     this.props.casa.is_mora == "0" ? this.setState({isDialogVisible: true}): 
-    Toast.show("No puede acceder a esta funcionalidad mientras esté en mora.", Toast.LONG);
+    Toast.show("No puede acceder a esta funcionalidad mientras esté en mora.", {
+      duration: Toast.durations.LONG,
+      position: Toast.positions.BOTTOM,
+    });
   }
   cancelUsuario = () => {
     this.setState({

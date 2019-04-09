@@ -11,7 +11,6 @@ export default class CardNotificacion extends React.Component {
         value = value ? 0 : 1;
         this.setState({activado: value});
         this.props.handleChangeNotification(this.props.notificacion.id_tipo_notificacion, value);
-
     }
     componentDidMount() {
         this.setState({activado: this.props.notificacion.activado});

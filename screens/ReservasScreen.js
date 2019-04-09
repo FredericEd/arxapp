@@ -4,7 +4,7 @@ import { getPedidos } from '../actions/apiFunctions';
 import CardReserva from '../elements/CardReserva';
 import { connect } from 'react-redux';
 import { updateLoader } from '../redux/actions';
-import Toast from 'react-native-simple-toast';
+import Toast from 'react-native-root-toast';
 
 const ReservasHeader = props => {
   return (
@@ -31,12 +31,18 @@ class ReservasScreen extends React.Component {
         this.props.updateLoader(false);
       } catch (e) {
           this.props.updateLoader(false);
-          Toast.show("Ha ocurrido un error. Verifique su conexión a internet.", Toast.LONG);
+          Toast.show("Ha ocurrido un error. Verifique su conexión a internet.", {
+            duration: Toast.durations.LONG,
+            position: Toast.positions.BOTTOM,
+          });
       }
     }
     handleNewReserva = () => {
       this.props.casa.is_mora == "0" ? this.props.navigation.navigate("Instalaciones") : 
-      Toast.show("No puede acceder a esta funcionalidad mientras esté en mora.", Toast.LONG);
+      Toast.show("No puede acceder a esta funcionalidad mientras esté en mora.", {
+        duration: Toast.durations.LONG,
+        position: Toast.positions.BOTTOM,
+      });
     }
     render() {
       return (

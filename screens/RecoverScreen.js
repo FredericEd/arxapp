@@ -2,7 +2,7 @@ import React from 'react';
 import {TouchableOpacity, View, StyleSheet, Text, TextInput, Modal, ScrollView, KeyboardAvoidingView} from 'react-native';
 import {recoverClave, confirmClave, saveClave} from '../actions/authFunctions';
 import {connect} from 'react-redux';
-import Toast from 'react-native-simple-toast';
+import Toast from 'react-native-root-toast';
 import { StackActions } from 'react-navigation';
 import { updateLoader } from '../redux/actions';
 import Loader from '../elements/Loader';
@@ -21,13 +21,22 @@ class RecoverScreen extends React.Component {
         if (this.state.cedula != "") {
           this.props.updateLoader(true);
           const response = await recoverClave(this.state.cedula);
-          Toast.show(response["message"], Toast.LONG);
+          Toast.show(response["message"], {
+            duration: Toast.durations.LONG,
+            position: Toast.positions.BOTTOM,
+          });
           this.setState({cedula2: this.state.cedula});
           this.props.updateLoader(false);
-        } else Toast.show("Debe llenar el campo de cédula.", Toast.LONG);
+        } else Toast.show("Debe llenar el campo de cédula.", {
+          duration: Toast.durations.LONG,
+          position: Toast.positions.BOTTOM,
+        });
       } catch (e) {
           this.props.updateLoader(false);
-          Toast.show("Ha ocurrido un error. Verifique su conexión a internet.", Toast.LONG);
+          Toast.show("Ha ocurrido un error. Verifique su conexión a internet.", {
+            duration: Toast.durations.LONG,
+            position: Toast.positions.BOTTOM,
+          });
       }
     }
     handleConfirm = async () => {
@@ -35,34 +44,55 @@ class RecoverScreen extends React.Component {
         if (this.state.cedula2 != "" && this.state.codigo != "") {
           this.props.updateLoader(true);
           const response = await confirmClave(this.state.cedula2, this.state.codigo);
-          Toast.show(response["message"], Toast.LONG);
+          Toast.show(response["message"], {
+            duration: Toast.durations.LONG,
+            position: Toast.positions.BOTTOM,
+          });
           !response.error && this.setState({isDialogClaveVisible: true});
           this.props.updateLoader(false);
-        } else Toast.show("Todos los campos son obligatorios.", Toast.LONG);
+        } else Toast.show("Todos los campos son obligatorios.", {
+          duration: Toast.durations.LONG,
+          position: Toast.positions.BOTTOM,
+        });
       } catch (e) {
           this.props.updateLoader(false);
-          Toast.show("Ha ocurrido un error. Verifique su conexión a internet.", Toast.LONG);
+          Toast.show("Ha ocurrido un error. Verifique su conexión a internet.", {
+            duration: Toast.durations.LONG,
+            position: Toast.positions.BOTTOM,
+          });
       }
     }
     handleSaveClave = async () => {
       try {
         if (this.state.clave1 != "" && this.state.clave2 != "") {
           if (this.state.clave1 != this.state.clave2) {
-            Toast.show("Las claves ingresadas no coinciden.", Toast.LONG);
+            Toast.show("Las claves ingresadas no coinciden.", {
+              duration: Toast.durations.LONG,
+              position: Toast.positions.BOTTOM,
+            });
             return;
           }
           this.props.updateLoader(true);
           const response = await saveClave(this.state.cedula2, this.state.clave1, this.state.codigo);
-          Toast.show(response["message"], Toast.LONG);
+          Toast.show(response["message"], {
+            duration: Toast.durations.LONG,
+            position: Toast.positions.BOTTOM,
+          });
           if (!response.error){
               this.cancelDialog();
               this.props.navigation.dispatch(StackActions.popToTop())
-          } else Toast.show("Todos los campos son obligatorios.", Toast.LONG);
+          } else Toast.show("Todos los campos son obligatorios.", {
+            duration: Toast.durations.LONG,
+            position: Toast.positions.BOTTOM,
+          });
           this.props.updateLoader(false);
         }
       } catch (e) {
           this.props.updateLoader(false);
-          Toast.show("Ha ocurrido un error. Verifique su conexión a internet.", Toast.LONG);
+          Toast.show("Ha ocurrido un error. Verifique su conexión a internet.", {
+            duration: Toast.durations.LONG,
+            position: Toast.positions.BOTTOM,
+          });
       }
     }
     cancelDialog = () =>  this.setState({isDialogClaveVisible: false});

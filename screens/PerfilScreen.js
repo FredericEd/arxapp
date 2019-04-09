@@ -1,6 +1,6 @@
 import React from 'react';
 import { Dimensions, View, Text, StyleSheet, Image, TouchableOpacity, Linking, TextInput, Modal, ScrollView, KeyboardAvoidingView } from 'react-native';
-import Toast from 'react-native-simple-toast';
+import Toast from 'react-native-root-toast';
 import { connect } from 'react-redux';
 import { saveComentario, saveClave } from '../actions/apiFunctions';
 import { updateLoader } from '../redux/actions';
@@ -24,32 +24,53 @@ class PerfilScreen extends React.Component {
         if (this.state.comentario != "") {
           this.props.updateLoader(true);
           const response = await saveComentario("3", this.state.comentario, this.props.usuario.api_key);
-          Toast.show(response["message"], Toast.LONG);
+          Toast.show(response["message"], {
+            duration: Toast.durations.LONG,
+            position: Toast.positions.BOTTOM,
+          });
           this.setState({comentario: ""});
           this.props.updateLoader(false);
-        } else Toast.show("No puede enviar comentarios vacíos", Toast.LONG);
-      } else Toast.show("No puede acceder a esta funcionalidad mientras esté en mora.", Toast.LONG);
+        } else Toast.show("No puede enviar comentarios vacíos", {
+          duration: Toast.durations.LONG,
+          position: Toast.positions.BOTTOM,
+        });
+      } else Toast.show("No puede acceder a esta funcionalidad mientras esté en mora.", {
+        duration: Toast.durations.LONG,
+        position: Toast.positions.BOTTOM,
+      });
     } catch (e) {
         this.props.updateLoader(false);
-        Toast.show("Ha ocurrido un error. Verifique su conexión a internet.", Toast.LONG);
+        Toast.show("Ha ocurrido un error. Verifique su conexión a internet.", {
+          duration: Toast.durations.LONG,
+          position: Toast.positions.BOTTOM,
+        });
     }
   }
   handleSaveClave = async () => {
     try {
       if (this.state.clave1 != "" && this.state.clave2 != "") {
         if (this.state.clave1 != this.state.clave2) {
-          Toast.show("Las claves ingresadas no coinciden.", Toast.LONG);
+          Toast.show("Las claves ingresadas no coinciden.", {
+            duration: Toast.durations.LONG,
+            position: Toast.positions.BOTTOM,
+          });
           return;
         }
         this.props.updateLoader(true);
         const response = await saveClave(this.state.clave1, this.props.usuario.api_key);
-        Toast.show(response["message"], Toast.LONG);
+        Toast.show(response["message"], {
+          duration: Toast.durations.LONG,
+          position: Toast.positions.BOTTOM,
+        });
         !response.error && this.cancelClave();
         this.props.updateLoader(false);
       }
     } catch (e) {
         this.props.updateLoader(false);
-        Toast.show("Ha ocurrido un error. Verifique su conexión a internet.", Toast.LONG);
+        Toast.show("Ha ocurrido un error. Verifique su conexión a internet.", {
+          duration: Toast.durations.LONG,
+          position: Toast.positions.BOTTOM,
+        });
     }
   }
   cancelClave = () => {

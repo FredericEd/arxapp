@@ -3,7 +3,7 @@ import {TouchableOpacity, View, StyleSheet, Text, TextInput, Image, KeyboardAvoi
 import {login} from '../actions/authFunctions';
 import {connect} from 'react-redux';
 import {updateUser, updateLoader} from '../redux/actions';
-import Toast from 'react-native-simple-toast';
+import Toast from 'react-native-root-toast';
 import Loader from '../elements/Loader';
 
 class LoginScreen extends React.Component {
@@ -16,16 +16,27 @@ class LoginScreen extends React.Component {
             if (this.state.correo != "" && this.state.clave != "") {
                 this.props.updateLoader(true);
                 const response = await login(this.state.correo, this.state.clave);
-                Toast.show(response[1]["message"], Toast.LONG);
+                Toast.show(response[1]["message"], {
+                    duration: Toast.durations.LONG,
+                    position: Toast.positions.BOTTOM,
+                });
                 this.props.updateLoader(false);
                 if (response[0]) {
                     this.props.updateUser(response[1]["usuario"]);
                     this.props.navigation.navigate('Casas');
                 }
-            } else Toast.show("Todos los campos son obligatorios.", Toast.LONG);
+                return;
+            }
+            Toast.show("Todos los campos son obligatorios.", {
+                duration: Toast.durations.LONG,
+                position: Toast.positions.BOTTOM,
+            });
         } catch (e) {
             this.props.updateLoader(false);
-            Toast.show("Ha ocurrido un error. Verifique su conexión a internet.", Toast.LONG);
+            Toast.show("Ha ocurrido un error. Verifique su conexión a internet.", {
+                duration: Toast.durations.LONG,
+                position: Toast.positions.BOTTOM,
+            });
         }
     }
     handleCorreo = correo => this.setState({correo});
