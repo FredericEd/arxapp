@@ -1,5 +1,5 @@
 import React from 'react';
-import { Dimensions, View, Text, StyleSheet, Image, TouchableOpacity, Linking, TextInput, Modal, ScrollView, KeyboardAvoidingView } from 'react-native';
+import { Dimensions, View, Text, StyleSheet, Image, TouchableOpacity, Linking, TextInput, Modal, ScrollView, KeyboardAvoidingView, Keyboard } from 'react-native';
 import Toast from 'react-native-root-toast';
 import { connect } from 'react-redux';
 import { saveComentario, saveClave } from '../actions/apiFunctions';
@@ -20,6 +20,7 @@ class PerfilScreen extends React.Component {
   handleClave2 = clave2 => this.setState({clave2});
   handleSaveComentario = async () => {
     try {
+      Keyboard.dismiss();
       if (this.props.casa.is_mora == "0") {
         if (this.state.comentario != "") {
           this.props.updateLoader(true);
@@ -34,10 +35,12 @@ class PerfilScreen extends React.Component {
           duration: Toast.durations.LONG,
           position: Toast.positions.BOTTOM,
         });
-      } else Toast.show("No puede acceder a esta funcionalidad mientras esté en mora.", {
-        duration: Toast.durations.LONG,
-        position: Toast.positions.BOTTOM,
-      });
+      } else {
+        Toast.show("No puede acceder a esta funcionalidad mientras esté en mora.", {
+          duration: Toast.durations.LONG,
+          position: Toast.positions.BOTTOM,
+        });
+      }
     } catch (e) {
         this.props.updateLoader(false);
         Toast.show("Ha ocurrido un error. Verifique su conexión a internet.", {
@@ -48,6 +51,7 @@ class PerfilScreen extends React.Component {
   }
   handleSaveClave = async () => {
     try {
+      Keyboard.dismiss();
       if (this.state.clave1 != "" && this.state.clave2 != "") {
         if (this.state.clave1 != this.state.clave2) {
           Toast.show("Las claves ingresadas no coinciden.", {
@@ -74,6 +78,7 @@ class PerfilScreen extends React.Component {
     }
   }
   cancelClave = () => {
+    Keyboard.dismiss();
     this.setState({
       clave1: "",
       clave2: "", 

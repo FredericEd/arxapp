@@ -1,5 +1,5 @@
 import React from 'react';
-import {TouchableOpacity, View, StyleSheet, Text, TextInput, Modal, ScrollView, KeyboardAvoidingView} from 'react-native';
+import {TouchableOpacity, View, StyleSheet, Text, TextInput, Modal, ScrollView, KeyboardAvoidingView, Keyboard} from 'react-native';
 import {recoverClave, confirmClave, saveClave} from '../actions/authFunctions';
 import {connect} from 'react-redux';
 import Toast from 'react-native-root-toast';
@@ -18,6 +18,7 @@ class RecoverScreen extends React.Component {
     }
     handleRecover = async () => {
       try {
+        Keyboard.dismiss();
         if (this.state.cedula != "") {
           this.props.updateLoader(true);
           const response = await recoverClave(this.state.cedula);
@@ -41,6 +42,7 @@ class RecoverScreen extends React.Component {
     }
     handleConfirm = async () => {
       try {
+        Keyboard.dismiss();
         if (this.state.cedula2 != "" && this.state.codigo != "") {
           this.props.updateLoader(true);
           const response = await confirmClave(this.state.cedula2, this.state.codigo);
@@ -64,6 +66,7 @@ class RecoverScreen extends React.Component {
     }
     handleSaveClave = async () => {
       try {
+        Keyboard.dismiss();
         if (this.state.clave1 != "" && this.state.clave2 != "") {
           if (this.state.clave1 != this.state.clave2) {
             Toast.show("Las claves ingresadas no coinciden.", {

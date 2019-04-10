@@ -1,29 +1,28 @@
 export const login = async (correo, clave) => {
-    const queryString = require('query-string');
+    const formData = new FormData();
+    formData.append("correo", correo);
+    formData.append("clave", clave);
     const response = await fetch('https://arxsmart.com/api/v1/usuarios/login', {
         method: 'POST',
-        headers: new Headers({'Content-Type':'application/x-www-form-urlencoded'}),
-        body: queryString.stringify({correo, clave}),
+        headers: new Headers({'Content-Type': 'multipart/form-data',}),
+        body: formData,
     });
     const json = await response.json();
     console.log(json);
-    if (response.ok) {
-        //sessionStorage.setItem("token", json.data.access_token);
-        //sessionStorage.setItem("refreshToken", json.data.refresh_token);
-    }
     return [response.ok, json];
 }
 
 export const recoverClave = async (cedula) => {
-    const queryString = require('query-string');
+    const formData = new FormData();
+    formData.append("cedula", cedula);
     const response = await fetch('https://arxsmart.com/api/v1/usuarios/recover/request', {
         method: 'POST',
         headers: {
-            'Content-Type':'application/x-www-form-urlencoded',
+            'Content-Type': 'multipart/form-data',
             'Cache-Control': 'no-cache',
             'Expires': '0',
         },
-        body: queryString.stringify({cedula}),
+        body: formData,
     });
     const json = await response.json();
     console.log(json);
@@ -31,15 +30,17 @@ export const recoverClave = async (cedula) => {
 }
 
 export const confirmClave = async (cedula, code) => {
-    const queryString = require('query-string');
+    const formData = new FormData();
+    formData.append("cedula", cedula);
+    formData.append("code", code);
     const response = await fetch('https://arxsmart.com/api/v1/usuarios/recover/verify', {
         method: 'POST',
         headers: {
-            'Content-Type':'application/x-www-form-urlencoded',
+            'Content-Type': 'multipart/form-data',
             'Cache-Control': 'no-cache',
             'Expires': '0',
         },
-        body: queryString.stringify({cedula, code}),
+        body: formData,
     });
     const json = await response.json();
     console.log(json);
@@ -47,15 +48,18 @@ export const confirmClave = async (cedula, code) => {
 }
 
 export const saveClave = async (cedula, clave, code) => {
-    const queryString = require('query-string');
+    const formData = new FormData();
+    formData.append("cedula", cedula);
+    formData.append("clave", clave);
+    formData.append("code", code);
     const response = await fetch('https://arxsmart.com/api/v1/usuarios/recover/password', {
         method: 'POST',
         headers: {
-            'Content-Type':'application/x-www-form-urlencoded',
+            'Content-Type': 'multipart/form-data',
             'Cache-Control': 'no-cache',
             'Expires': '0',
         },
-        body: queryString.stringify({cedula, clave, code}),
+        body: formData,
     });
     const json = await response.json();
     console.log(json);

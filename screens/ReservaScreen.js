@@ -1,5 +1,5 @@
 import React from 'react';
-import { Text, StyleSheet, View, TextInput, TouchableOpacity, ScrollView } from 'react-native';
+import { Text, StyleSheet, View, TextInput, TouchableOpacity, ScrollView, Keyboard } from 'react-native';
 import DatePicker from 'react-native-datepicker';
 import { connect } from 'react-redux';
 import { updateLoader } from '../redux/actions';
@@ -23,6 +23,7 @@ class ReservaScreen extends React.Component {
     
     handleSaveReserva = async () => {
       try {
+        Keyboard.dismiss();
         if (this.state.fecha != "" && this.state.time != "" && this.state.horas != "") {
           this.props.updateLoader(true);
           const response = await saveReserva(this.props.casa.id_casa, this.state.instalacion.id_instalacion, this.state.fecha, this.state.time,this.state.horas ,this.props.usuario.api_key);

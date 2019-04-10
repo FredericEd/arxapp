@@ -8,7 +8,7 @@ import { updateLoader } from '../redux/actions';
 class ReservasScreen extends React.Component {
 
     state = {
-      elements: [], 
+      elements: "", 
     }
     componentDidMount() {
       this.didFocus = this.props.navigation.addListener('didFocus', () => this.handleInstalaciones());
@@ -23,14 +23,16 @@ class ReservasScreen extends React.Component {
         this.setState({elements});
         this.props.updateLoader(false);
       } catch (e) {
-          this.props.updateLoader(false);
-          Toast.show("Ha ocurrido un error. Verifique su conexión a internet.", Toast.LONG);
+        const elements = [];
+        this.props.updateLoader(false);
+        this.setState({elements});
+        Toast.show("Ha ocurrido un error. Verifique su conexión a internet.", Toast.LONG);
       }
     }
     render() {
       return (
         <ScrollView>
-          {this.state.elements.length > 0 &&
+          {this.state.elements != "" && this.state.elements.length > 0 &&
           <FlatList
             style={{paddingLeft:5, paddingTop:5}}
             data={this.state.elements}
@@ -40,7 +42,7 @@ class ReservasScreen extends React.Component {
             keyExtractor={element => "" + element.id_instalacion}
             numColumns={2} />
           }
-          {this.state.elements.length == 0 &&
+          {this.state.elements != "" && this.state.elements.length == 0 &&
               <View>
                   <Text style={styles.emptyText}>No hay instalaciones disponibles.</Text>
               </View>

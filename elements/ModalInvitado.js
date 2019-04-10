@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, Text, StyleSheet, TouchableOpacity, TextInput, Modal } from 'react-native';
+import { View, Text, StyleSheet, TouchableOpacity, TextInput, Modal, Keyboard } from 'react-native';
 import Toast from 'react-native-root-toast';
 import { saveUsuario, getUsuariosByCedula } from '../actions/apiFunctions';
 
@@ -22,6 +22,7 @@ export default class ModalInvitado extends React.Component {
   handleCorreo = correo => this.setState({correo});
   handleTelefono = telefono => this.setState({telefono});
   handleSaveUsuario = async () => {
+    Keyboard.dismiss();
     switch (this.state.paso) {
       case 0:
         if (this.state.cedula.length == 10) {
@@ -80,6 +81,7 @@ export default class ModalInvitado extends React.Component {
     });
   }
   cancelUsuario = () => {
+    Keyboard.dismiss();
     this.setState({
       isDialogVisible: false,
       cedula: "",

@@ -4,7 +4,7 @@ import { getNotificaciones, saveNotificaciones } from '../actions/apiFunctions';
 import CardNotificacion from '../elements/CardNotificacion';
 import { connect } from 'react-redux';
 import { updateLoader } from '../redux/actions';
-import Toast from 'react-native-simple-toast';
+import Toast from 'react-native-root-toast';
 
 class ConfiguracionesScreen extends React.Component {
     state = {
@@ -32,7 +32,10 @@ class ConfiguracionesScreen extends React.Component {
         this.props.updateLoader(false);
       } catch (e) {
         this.props.updateLoader(false);
-        Toast.show("Ha ocurrido un error. Verifique su conexión a internet.", Toast.LONG);
+        Toast.show("Ha ocurrido un error. Verifique su conexión a internet.", {
+          duration: Toast.durations.LONG,
+          position: Toast.positions.BOTTOM,
+        });
       }
     }
     handleSaveNotificaciones = async () => {
@@ -45,11 +48,17 @@ class ConfiguracionesScreen extends React.Component {
         }
         this.props.updateLoader(true);
         const response = await saveNotificaciones(data, this.props.usuario.api_key);
-        Toast.show(response["message"], Toast.LONG);
+        Toast.show(response["message"], {
+          duration: Toast.durations.LONG,
+          position: Toast.positions.BOTTOM,
+        });
         this.props.updateLoader(false);
       } catch (e) {
           this.props.updateLoader(false);
-          Toast.show("Ha ocurrido un error. Verifique su conexión a internet.", Toast.LONG);
+          Toast.show("Ha ocurrido un error. Verifique su conexión a internet.", {
+            duration: Toast.durations.LONG,
+            position: Toast.positions.BOTTOM,
+          });
       }
     }
     render() {

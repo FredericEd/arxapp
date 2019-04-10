@@ -2,7 +2,7 @@ import React from 'react';
 import { Dimensions, Image, StyleSheet, View, Text, TouchableOpacity, Modal, TouchableWithoutFeedback } from 'react-native';
 import { updateCasa, updateLoader } from '../redux/actions';
 import { connect } from 'react-redux';
-import Toast from 'react-native-simple-toast';
+import Toast from 'react-native-root-toast';
 import { saveEmergencia } from '../actions/apiFunctions';
 import { Permissions, Notifications } from 'expo';
 
@@ -34,12 +34,19 @@ class HomeScreen extends React.Component {
       try {
         this.changeDialogState(false);
         this.props.updateLoader(true);
+        console.log("test");
         const response = await saveEmergencia(this.props.casa.id_casa, this.props.usuario.api_key);
-        Toast.show(response["message"], Toast.LONG);
+        Toast.show(response["message"], {
+          duration: Toast.durations.LONG,
+          position: Toast.positions.BOTTOM,
+        });
         this.props.updateLoader(false);
       } catch (e) {
           this.props.updateLoader(false);
-          Toast.show("Ha ocurrido un error. Verifique su conexión a internet.", Toast.LONG);
+          Toast.show("Ha ocurrido un error. Verifique su conexión a internet.", {
+            duration: Toast.durations.LONG,
+            position: Toast.positions.BOTTOM,
+          });
       }
     }
     lastTap = null;
@@ -78,13 +85,16 @@ class HomeScreen extends React.Component {
         if (finalStatus !== 'granted') return;
       
         let token_push = await Notifications.getExpoPushTokenAsync();
-        const queryString = require('query-string');
+        const formData = new FormData();
+        formData.append("token", token_push);
+        formData.append("id_casa", id_casa);
         const response = await fetch('https://arxsmart.com/api/v1/usuarios/push', {
           method: 'POST',
           headers: {
-              'Content-Type':'application/x-www-form-urlencoded', 'token': token, 'Cache-Control': 'no-cache', 'Expires': '0',
+            'Content-Type': 'multipart/form-data',
+            'token': token, 'Cache-Control': 'no-cache', 'Expires': '0',
           },
-          body: queryString.stringify({token: token_push, id_casa}),
+          body: formData,
         }); 
         const json = await response.json();
         typeof json.casa["id_casa"] != "undefined" && this.props.updateCasa(json.casa);

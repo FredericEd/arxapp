@@ -1,5 +1,5 @@
 import React from 'react';
-import {TouchableOpacity, View, StyleSheet, Text, TextInput, Image, KeyboardAvoidingView, ScrollView} from 'react-native';
+import {TouchableOpacity, View, StyleSheet, Text, TextInput, Image, KeyboardAvoidingView, ScrollView, Keyboard} from 'react-native';
 import {login} from '../actions/authFunctions';
 import {connect} from 'react-redux';
 import {updateUser, updateLoader} from '../redux/actions';
@@ -13,6 +13,7 @@ class LoginScreen extends React.Component {
     }
     handleLogin = async () => {
         try {
+            Keyboard.dismiss();
             if (this.state.correo != "" && this.state.clave != "") {
                 this.props.updateLoader(true);
                 const response = await login(this.state.correo, this.state.clave);

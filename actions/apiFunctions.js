@@ -2,7 +2,7 @@ export const getInstalaciones = async (id_casa, token) => {
     const response = await fetch('https://arxsmart.com/api/v1/usuarios/casas/' + id_casa + '/instalaciones', {
         method: 'GET',
         headers: {
-            'Content-Type':'application/x-www-form-urlencoded',
+            'Content-Type': 'multipart/form-data',
             'token': token,
             'Cache-Control': 'no-cache',
             'Expires': '0',
@@ -17,7 +17,7 @@ export const getPedidos = async (id_casa, token) => {
     const response = await fetch('https://arxsmart.com/api/v1/usuarios/casas/' + id_casa + '/pedidos', {
         method: 'GET',
         headers: {
-            'Content-Type':'application/x-www-form-urlencoded',
+            'Content-Type': 'multipart/form-data',
             'token': token,
             'Cache-Control': 'no-cache',
             'Expires': '0',
@@ -32,7 +32,7 @@ export const getAnuncios = async (id_etapa, token) => {
     const response = await fetch('https://arxsmart.com/api/v1/etapas/' + id_etapa + '/anuncios', {
         method: 'GET',
         headers: {
-            'Content-Type':'application/x-www-form-urlencoded',
+            'Content-Type': 'multipart/form-data',
             'token': token,
             'Cache-Control': 'no-cache',
             'Expires': '0',
@@ -47,7 +47,7 @@ export const getUsuarios = async (id_casa, id_tipo_usuario, token) => {
     const response = await fetch('https://arxsmart.com/api/v1/usuarios/casas/' + id_casa + '/usuarios?id_tipo_usuario=' + id_tipo_usuario, {
         method: 'GET',
         headers: {
-            'Content-Type':'application/x-www-form-urlencoded',
+            'Content-Type': 'multipart/form-data',
             'token': token,
             'Cache-Control': 'no-cache',
             'Expires': '0',
@@ -62,7 +62,7 @@ export const getPagos = async (id_casa, token) => {
     const response = await fetch('https://arxsmart.com/api/v1/usuarios/casas/' + id_casa + '/pagos', {
         method: 'GET',
         headers: {
-            'Content-Type':'application/x-www-form-urlencoded',
+            'Content-Type': 'multipart/form-data',
             'token': token,
             'Cache-Control': 'no-cache',
             'Expires': '0',
@@ -77,7 +77,7 @@ export const getCasas = async (token) => {
     const response = await fetch('https://arxsmart.com/api/v1/usuarios/casas', {
         method: 'GET',
         headers: {
-            'Content-Type':'application/x-www-form-urlencoded',
+            'Content-Type': 'multipart/form-data',
             'token': token,
             'Cache-Control': 'no-cache',
             'Expires': '0',
@@ -92,7 +92,7 @@ export const getDeudas = async (id_casa, token) => {
     const response = await fetch('https://arxsmart.com/api/v1/usuarios/casas/' + id_casa + '/deudas', {
         method: 'GET',
         headers: {
-            'Content-Type':'application/x-www-form-urlencoded',
+            'Content-Type': 'multipart/form-data',
             'token': token,
             'Cache-Control': 'no-cache',
             'Expires': '0',
@@ -107,7 +107,7 @@ export const getVisitantes = async (id_casa, token) => {
     const response = await fetch('https://arxsmart.com/api/v1/usuarios/casas/' + id_casa + '/visitantes', {
         method: 'GET',
         headers: {
-            'Content-Type':'application/x-www-form-urlencoded',
+            'Content-Type': 'multipart/form-data',
             'token': token,
             'Cache-Control': 'no-cache',
             'Expires': '0',
@@ -119,16 +119,17 @@ export const getVisitantes = async (id_casa, token) => {
 }
 
 export const getUsuariosByCedula = async (cedula, token) => {
-    const queryString = require('query-string');
+    const formData = new FormData();
+    formData.append("cedula", cedula);
     const response = await fetch('https://arxsmart.com/api/v1/usuarios/search/cedula', {
         method: 'POST',
         headers: {
-            'Content-Type':'application/x-www-form-urlencoded',
+            'Content-Type': 'multipart/form-data',
             'token': token,
             'Cache-Control': 'no-cache',
             'Expires': '0',
         },
-        body: queryString.stringify({cedula}),
+        body: formData,
     });
     const json = await response.json();
     console.log(json);
@@ -139,7 +140,7 @@ export const getNotificaciones = async token => {
     const response = await fetch('https://arxsmart.com/api/v1/notificaciones', {
         method: 'GET',
         headers: {
-            'Content-Type':'application/x-www-form-urlencoded',
+            'Content-Type': 'multipart/form-data',
             'token': token,
             'Cache-Control': 'no-cache',
             'Expires': '0',
@@ -151,16 +152,18 @@ export const getNotificaciones = async token => {
 }
 
 export const saveComentario = async (id_casa, comentario, token) => {
-    const queryString = require('query-string');
+    const formData = new FormData();
+    formData.append("id_casa", id_casa);
+    formData.append("comentario", comentario);
     const response = await fetch('https://arxsmart.com/api/v1/comentarios', {
         method: 'POST',
         headers: {
-            'Content-Type':'application/x-www-form-urlencoded',
+            'Content-Type': 'multipart/form-data',
             'token': token,
             'Cache-Control': 'no-cache',
             'Expires': '0',
         },
-        body: queryString.stringify({id_casa, comentario}),
+        body: formData,
     });
     const json = await response.json();
     console.log(json);
@@ -168,16 +171,17 @@ export const saveComentario = async (id_casa, comentario, token) => {
 }
 
 export const saveClave = async (clave, token) => {
-    const queryString = require('query-string');
-    const response = await fetch('https://arxsmart.com/api/v1/usuarios', {
-        method: 'PUT',
+    const formData = new FormData();
+    formData.append("clave", clave);
+    const response = await fetch('https://arxsmart.com/api/v1/usuarios/clave', {
+        method: 'POST',
         headers: {
-            'Content-Type':'application/x-www-form-urlencoded',
+            'Content-Type': 'multipart/form-data',
             'token': token,
             'Cache-Control': 'no-cache',
             'Expires': '0',
         },
-        body: queryString.stringify({clave}),
+        body: formData,
     });
     const json = await response.json();
     console.log(json);
@@ -185,16 +189,23 @@ export const saveClave = async (clave, token) => {
 }
 
 export const saveUsuario = async (id_usuario, cantidad, id_casa, cedula, nombre, correo, telefono, token) => {
-    const queryString = require('query-string');
+    const formData = new FormData();
+    formData.append("id_usuario", id_usuario);
+    formData.append("cantidad", cantidad);
+    formData.append("id_casa", id_casa);
+    formData.append("cedula", cedula);
+    formData.append("nombre", nombre);
+    formData.append("correo", correo);
+    formData.append("telefono", telefono);
     const response = await fetch('https://arxsmart.com/api/v1/usuarios/invitados', {
         method: 'POST',
         headers: {
-            'Content-Type':'application/x-www-form-urlencoded',
+            'Content-Type': 'multipart/form-data',
             'token': token,
             'Cache-Control': 'no-cache',
             'Expires': '0',
         },
-        body: queryString.stringify({id_usuario, cantidad, id_casa, cantidad, cedula, nombre, correo, telefono}),
+        body: formData,
     });
     const json = await response.json();
     console.log(json);
@@ -202,16 +213,20 @@ export const saveUsuario = async (id_usuario, cantidad, id_casa, cedula, nombre,
 }
 
 export const saveReserva = async (id_casa, id_instalacion, fecha, time, horas, token) => {
-    const queryString = require('query-string');
+    const formData = new FormData();
+    formData.append("id_casa", id_casa);
+    formData.append("fecha", fecha);
+    formData.append("time", time);
+    formData.append("horas", horas);
     const response = await fetch('https://arxsmart.com/api/v1/instalaciones/' + id_instalacion + '/pedidos', {
         method: 'POST',
         headers: {
-            'Content-Type':'application/x-www-form-urlencoded',
+            'Content-Type': 'multipart/form-data',
             'token': token,
             'Cache-Control': 'no-cache',
             'Expires': '0',
         },
-        body: queryString.stringify({id_casa, fecha, time, horas}),
+        body: formData,
     });
     const json = await response.json();
     console.log(json);
@@ -219,16 +234,17 @@ export const saveReserva = async (id_casa, id_instalacion, fecha, time, horas, t
 }
 
 export const saveEmergencia = async (id_casa, token) => {
-    const queryString = require('query-string');
+    const formData = new FormData();
+    formData.append("id_casa", id_casa);
     const response = await fetch('https://arxsmart.com/api/v1/emergencias', {
         method: 'POST',
         headers: {
-            'Content-Type':'application/x-www-form-urlencoded',
+            'Content-Type': 'multipart/form-data',
             'token': token,
             'Cache-Control': 'no-cache',
             'Expires': '0',
         },
-        body: queryString.stringify({id_casa}),
+        body:formData,
     });
     const json = await response.json();
     console.log(json);
@@ -236,16 +252,17 @@ export const saveEmergencia = async (id_casa, token) => {
 }
 
 export const saveNotificaciones = async (data, token) => {
-    const queryString = require('query-string');
+    const formData = new FormData();
+    formData.append("data", data);
     const response = await fetch('https://arxsmart.com/api/v1/notificaciones', {
         method: 'POST',
         headers: {
-            'Content-Type':'application/x-www-form-urlencoded',
+            'Content-Type': 'multipart/form-data',
             'token': token,
             'Cache-Control': 'no-cache',
             'Expires': '0',
         },
-        body: queryString.stringify({data}),
+        body: formData,
     });
     const json = await response.json();
     console.log(json);
