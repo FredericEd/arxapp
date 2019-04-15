@@ -1,20 +1,25 @@
 import React from 'react';
 import { FlatList, StyleSheet, Text, View, ScrollView, TouchableOpacity } from 'react-native';
-import { getNotificaciones, saveNotificaciones } from '../actions/apiFunctions';
+import { getConfiguraciones, saveNotificaciones } from '../actions/apiFunctions';
 import CardNotificacion from '../elements/CardNotificacion';
 import { connect } from 'react-redux';
-import { updateLoader } from '../redux/actions';
+import {updateCasa, updateLoader} from '../redux/actions';
 import Toast from 'react-native-root-toast';
 
 class ConfiguracionesScreen extends React.Component {
     state = {
       notificaciones: [],
+      casas: [],
     }
     componentDidMount() {
-      this.didFocus = this.props.navigation.addListener('didFocus', () => this.handleNotificaciones());
+      this.didFocus = this.props.navigation.addListener('didFocus', () => this.handleConfiguraciones());
     }
     componentWillUnmount() {
       this.didFocus.remove();
+    }
+    cerrarSesion = () => {
+      this.props.updateCasa({});
+      this.props.screenProps.cerrarSesion();
     }
     handleChangeNotification = (id_tipo_notificacion, value) => {
       const notificaciones = [];
@@ -24,11 +29,13 @@ class ConfiguracionesScreen extends React.Component {
       }
       this.setState({notificaciones});
     }
-    handleNotificaciones = async () => {
+    handleConfiguraciones = async () => {
       try {
         this.props.updateLoader(true);
-        const notificaciones = await getNotificaciones(this.props.usuario.api_key);
-        this.setState({notificaciones});
+        const response = await getConfiguraciones(this.props.usuario.api_key);
+        const notificaciones = typeof response.notificaciones == "undefined" ? [] : response.notificaciones;
+        const casas = typeof response.casas == "undefined" ? [] : response.casas;
+        this.setState({notificaciones, casas});
         this.props.updateLoader(false);
       } catch (e) {
         this.props.updateLoader(false);
@@ -78,9 +85,18 @@ class ConfiguracionesScreen extends React.Component {
               <Text style={styles.emptyText}>No hay configuraciones de notificaciones.</Text>
             </View>
           }
-          <TouchableOpacity style={styles.buttonContainer} onPress={this.handleSaveNotificaciones}>
-            <Text style={styles.buttonText}>Guardar</Text>
-          </TouchableOpacity>
+          <View style={{marginTop:10}}>
+            {this.state.notificaciones.length > 0 &&
+              <TouchableOpacity style={styles.buttonContainer} onPress={this.handleSaveNotificaciones}>
+                <Text style={styles.buttonText}>Guardar</Text>
+              </TouchableOpacity>
+            }
+            {this.state.casas.length > 1 &&
+              <TouchableOpacity style={styles.buttonContainer} onPress={this.cerrarSesion}>
+                <Text style={styles.buttonText}>Cambiar de unidad funcional</Text>
+              </TouchableOpacity>
+            }
+          </View>
         </ScrollView>
       );
     }
@@ -107,7 +123,7 @@ const styles = StyleSheet.create({
       backgroundColor: '#2980b6',
       paddingVertical: 12,
       paddingHorizontal: 30,
-      marginTop: 20,
+      marginTop: 10,
       borderRadius: 5,
   },
   buttonText:{
@@ -120,4 +136,4 @@ const mapStateToProps = state => ({
   usuario: state.usuario,
   casa: state.casa,
 });
-export default connect(mapStateToProps, {updateLoader: updateLoader})(ConfiguracionesScreen);
+export default connect(mapStateToProps, {updateLoader: updateLoader, updateCasa: updateCasa})(ConfiguracionesScreen);

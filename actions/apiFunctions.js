@@ -136,8 +136,8 @@ export const getUsuariosByCedula = async (cedula, token) => {
     return typeof json.usuarios  == 'undefined' ? [] : json.usuarios;
 }
 
-export const getNotificaciones = async token => {
-    const response = await fetch('https://arxsmart.com/api/v1/notificaciones', {
+export const getConfiguraciones = async token => {
+    const response = await fetch('https://arxsmart.com/api/v1/configuraciones', {
         method: 'GET',
         headers: {
             'Content-Type': 'multipart/form-data',
@@ -148,7 +148,7 @@ export const getNotificaciones = async token => {
     });
     const json = await response.json();
     console.log(json);
-    return typeof json.notificaciones  == 'undefined' ? [] : json.notificaciones;
+    return json;
 }
 
 export const saveComentario = async (id_casa, comentario, token) => {

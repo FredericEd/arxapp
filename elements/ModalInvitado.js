@@ -22,55 +22,60 @@ export default class ModalInvitado extends React.Component {
   handleCorreo = correo => this.setState({correo});
   handleTelefono = telefono => this.setState({telefono});
   handleSaveUsuario = async () => {
-    Keyboard.dismiss();
-    switch (this.state.paso) {
-      case 0:
-        if (this.state.cedula.length == 10) {
-          const usuarios = await getUsuariosByCedula(this.state.cedula, this.props.usuario.api_key);
-          if (usuarios.length > 0) {
-            this.setState({paso: 2, id_usuario: usuarios[0]["id_usuario"]});
-            this.textCantidad.focus();
-          } else {
-            this.setState({paso: 1});
-            this.textNombre.focus();
+    try {
+      Keyboard.dismiss();
+      switch (this.state.paso) {
+        case 0:
+          if (this.state.cedula.length == 10) {
+            const usuarios = await getUsuariosByCedula(this.state.cedula, this.props.usuario.api_key);
+            if (usuarios.length > 0) {
+              this.setState({paso: 2, id_usuario: usuarios[0]["id_usuario"]});
+              this.textCantidad.focus();
+            } else {
+              this.setState({paso: 1});
+              this.textNombre.focus();
+            }
+          } else Toast.show("La cédula debe tener 10 caracteres.", {
+            duration: Toast.durations.LONG,
+            position: Toast.positions.BOTTOM,
+          });
+          break;
+        case 1:
+          if (this.state.nombre == "" || this.state.correo == "" || this.state.telefono == "") {
+            Toast.show("Todos los campos son requeridos.", {
+              duration: Toast.durations.LONG,
+              position: Toast.positions.BOTTOM,
+            });
+            return;
           }
-        } else Toast.show("La cédula debe tener 10 caracteres.", {
-          duration: Toast.durations.LONG,
-          position: Toast.positions.BOTTOM,
-        });
-        break;
-      case 1:
-        if (this.state.nombre == "" || this.state.correo == "" || this.state.telefono == "") {
-          Toast.show("Todos los campos son requeridos.", {
+        case 2:
+          if (this.state.cantidad.length == 0) {
+            Toast.show("Debe ingresar la cantidad de veces que podrá ingresar.", {
+              duration: Toast.durations.LONG,
+              position: Toast.positions.BOTTOM,
+            });
+            return;
+          } else if (parseInt(this.state.cantidad) < 1 || parseInt(this.state.cantidad) > 5) {
+            Toast.show("La cantidad debe estar entre 1 y 5.", {
+              duration: Toast.durations.LONG,
+              position: Toast.positions.BOTTOM,
+            });
+            return;
+          }
+          this.cancelUsuario();
+          this.props.updateLoader(true);
+          const response = await saveUsuario(this.state.id_usuario, this.state.cantidad, this.state.id_casa, this.state.cedula, this.state.nombre, this.state.correo, this.state.telefono, this.props.usuario.api_key);
+          Toast.show(response["message"], {
             duration: Toast.durations.LONG,
             position: Toast.positions.BOTTOM,
           });
-          return;
-        }
-      case 2:
-        if (this.state.cantidad.length == 0) {
-          Toast.show("Debe ingresar la cantidad de veces que podrá ingresar.", {
-            duration: Toast.durations.LONG,
-            position: Toast.positions.BOTTOM,
-          });
-          return;
-        } else if (parseInt(this.state.cantidad) < 1 || parseInt(this.state.cantidad) > 5) {
-          Toast.show("La cantidad debe estar entre 1 y 5.", {
-            duration: Toast.durations.LONG,
-            position: Toast.positions.BOTTOM,
-          });
-          return;
-        }
-        this.cancelUsuario();
-        this.props.updateLoader(true);
-        const response = await saveUsuario(this.state.id_usuario, this.state.cantidad, this.state.id_casa, this.state.cedula, this.state.nombre, this.state.correo, this.state.telefono, this.props.usuario.api_key);
-        Toast.show(response["message"], {
-          duration: Toast.durations.LONG,
-          position: Toast.positions.BOTTOM,
-        });
-        !response.error && this.props.handleUsuarios();
-        this.props.updateLoader(false);
-        break;
+          !response.error && this.props.handleUsuarios();
+          this.props.updateLoader(false);
+          break;
+      }
+    } catch (e) {
+      this.props.updateLoader(false);
+      Toast.show("Ha ocurrido un error. Verifique su conexión a internet.", Toast.LONG);
     }
   }
   handleNewInvitado = () => {

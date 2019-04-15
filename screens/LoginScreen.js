@@ -10,18 +10,21 @@ class LoginScreen extends React.Component {
     state = {
         correo: '',
         clave: '',
+        is_shown: true,
     }
     handleLogin = async () => {
         try {
             Keyboard.dismiss();
             if (this.state.correo != "" && this.state.clave != "") {
                 this.props.updateLoader(true);
+                this.setState({is_shown: false});
                 const response = await login(this.state.correo, this.state.clave);
                 Toast.show(response[1]["message"], {
                     duration: Toast.durations.LONG,
                     position: Toast.positions.BOTTOM,
                 });
                 this.props.updateLoader(false);
+                this.setState({is_shown: true});
                 if (response[0]) {
                     this.props.updateUser(response[1]["usuario"]);
                     this.props.navigation.navigate('Casas');
@@ -34,6 +37,7 @@ class LoginScreen extends React.Component {
             });
         } catch (e) {
             this.props.updateLoader(false);
+            this.setState({is_shown: true});
             Toast.show("Ha ocurrido un error. Verifique su conexión a internet.", {
                 duration: Toast.durations.LONG,
                 position: Toast.positions.BOTTOM,
@@ -44,6 +48,7 @@ class LoginScreen extends React.Component {
     handleClave = clave => this.setState({clave});
     componentDidMount(){
         this.props.updateLoader(false);
+        this.setState({is_shown: true});
         const usuario = this.props.usuario;
         const casa = this.props.casa;
         if (typeof usuario.correo != "undefined") {
@@ -57,7 +62,7 @@ class LoginScreen extends React.Component {
         return (
         <ScrollView keyboardShouldPersistTaps="always">
             <Loader loader={this.props.loader} />
-            <KeyboardAvoidingView style={styles.container} keyboardVerticalOffset={50} behavior={"position"}>
+            {this.state.is_shown && <KeyboardAvoidingView style={styles.container} keyboardVerticalOffset={50} behavior={"position"}>
                 <View style={{flexDirection:"row"}}>
                     <View style={{flex:1}}/>
                     <Image style={styles.logo} source={require('../assets/arxlogo2.png')} />
@@ -83,7 +88,7 @@ class LoginScreen extends React.Component {
                 <TouchableOpacity style={styles.buttonContainer} onPress={() => this.props.navigation.navigate('Recover')}>
                     <Text style={styles.buttonText}>Recuperar clave</Text>
                 </TouchableOpacity>
-            </KeyboardAvoidingView>
+            </KeyboardAvoidingView>}
         </ScrollView>
         )
   }
